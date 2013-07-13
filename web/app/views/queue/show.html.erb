@@ -1,22 +1,105 @@
-<h2>Waiting for match<h2>
+<div class="row">
+  <div class="large-12 columns">
 
-<p>
-  Time in queue: <span id="queue-elapsed-time">0:00</span>
-</p>
-<p>
-  Estimated waiting time: <span id="queue-waiting-time">4:35</span>
-</p>
+    <!-- Navigation -->
 
-<p>
-  <%= link_to 'Leave Queue', queue_leave_path, class: 'button', method: :put %>
-</p>
+      <nav class="top-bar">
+        <ul class="title-area">
+          <!-- Title Area -->
+          <li class="name">
+            <h1>
+              <a href="#">
+                ProMeet
+              </a>
+            </h1>
+          </li>
+          <li class="toggle-topbar menu-icon"><a href="#"><span>menu</span></a></li>
+        </ul>
 
-<script type="text/javascript">
-  window.queueController = new QueueController({
-    backend: <%= @queue_state.backend_url.inspect.html_safe %>,
-    key: <%= @queue_state.join_key.inspect.html_safe %>,
-    enteredAt: <%= @queue_entry.entered_at.to_f %>,
-    matchUrl: <%= match_url.inspect.html_safe %>
-  });
-</script>
+        <section class="top-bar-section">
+          <ul class="right">
+            <%= link_to 'Sign out', session_path, method: :delete %>
+           </ul>
 
+        </section>
+    </nav>
+
+    <!-- End Navigation -->
+
+    </div>
+  </div>
+
+
+  <div class="row">
+
+    <div class="large-6 columns" align="center">
+      <div class="panel">
+	<br>
+  <!--
+	<div class="row">
+	  Queueing time:
+	</div><br>
+	<br>
+	<div class="row">
+	  ETA:
+	</div><br><br><br><br>
+	<div class="row">
+	  <a href="#" class="tiny button radius secondary">Leave</a>
+	</div>
+  -->
+    <p>
+      Time in queue: <span id="queue-elapsed-time">0:00</span>
+    </p>
+    <p>
+      Estimated waiting time: <span id="queue-waiting-time">4:35</span>
+    </p>
+
+    <p>
+      <%= link_to 'Leave Queue', queue_leave_path, class: 'button', method: :put %>
+    </p>
+
+    <script type="text/javascript">
+      window.queueController = new QueueController({
+        backend: <%= @queue_state.backend_url.inspect.html_safe %>,
+        key: <%= @queue_state.join_key.inspect.html_safe %>,
+        enteredAt: <%= @queue_entry.entered_at.to_f %>,
+        matchUrl: <%= match_url.inspect.html_safe %>
+      });
+    </script>
+    
+      </div>
+    </div>
+
+    <div class="large-6 columns" align="left">
+       <div class="panel callout">
+	 <h5>Follow the rules:</h5>
+         <ul class="list no-bullet">
+           <li>1. Use it</li><br>
+           <li>2. Appreciate it</li><br>
+           <li>3. Wow it!</li><br>
+         </ul>
+      </div>
+    </div>
+
+  </div><br>
+
+    <!-- Footer -->
+
+  <footer class="row">
+    <div class="large-12 columns">
+      <hr>
+      <div class="row">
+        <div class="large-6 columns">
+          <p>&copy; Copyright 2013. The Hack.</p>
+        </div>
+        <div class="large-6 columns">
+          <ul class="inline-list right">
+	    <li><a href="faq.html">FAQ</a></li>
+            <li><a href="aboutus.html">About Us</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+    <!-- End Footer -->

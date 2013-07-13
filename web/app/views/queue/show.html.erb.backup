@@ -1,0 +1,22 @@
+<h2>Waiting for match<h2>
+
+<p>
+  Time in queue: <span id="queue-elapsed-time">0:00</span>
+</p>
+<p>
+  Estimated waiting time: <span id="queue-waiting-time">4:35</span>
+</p>
+
+<p>
+  <%= link_to 'Leave Queue', queue_leave_path, class: 'button', method: :put %>
+</p>
+
+<script type="text/javascript">
+  window.queueController = new QueueController({
+    backend: <%= @queue_state.backend_url.inspect.html_safe %>,
+    key: <%= @queue_state.join_key.inspect.html_safe %>,
+    enteredAt: <%= @queue_entry.entered_at.to_f %>,
+    matchUrl: <%= match_url.inspect.html_safe %>
+  });
+</script>
+
