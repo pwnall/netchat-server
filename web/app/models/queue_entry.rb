@@ -5,11 +5,14 @@ class QueueEntry < ActiveRecord::Base
 
   # New entry indicating that a user joined the queue.
   def self.new_for(user)
-    self.new user: user, entered_at: Time.now
+    queue_entry = QueueEntry.new
+    queue_entry.user = user
+    queue_entry.entered_at = Time.now
+    queue_entry
   end
 
   # The last (most recent) queue history entry.
   def self.last_for(user)
-    where(user_id: user.id).last
+    QueueEntry.where(user_id: user.id).last
   end
 end

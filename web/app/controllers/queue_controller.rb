@@ -16,7 +16,7 @@ class QueueController < ApplicationController
     end
   end
 
-  # POST /queue/enter
+  # PUT /queue/enter
   def enter
     if current_user.queued?
       redirect_to queue_path
@@ -24,11 +24,11 @@ class QueueController < ApplicationController
     end
 
     queue_state = current_user.queue! request.host
-    # TODO(pwnall): post to the queue backend
+    queue_state.push_to_backend queue_matched_url
     redirect_to queue_path
   end
 
-  # POST /queue/leave
+  # PUT /queue/leave
   def leave
     unless current_user.queued?
       redirect_to profile_path
@@ -36,5 +36,12 @@ class QueueController < ApplicationController
     end
 
     # TODO(pwnall): code for leaving the queue
+  end
+
+  # POST /queue/matched
+  #
+  # Called by the queue backend.
+  def matched
+    # TODO(pwnall): update the database
   end
 end

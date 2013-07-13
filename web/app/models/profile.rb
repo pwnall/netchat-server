@@ -20,4 +20,11 @@ class Profile < ActiveRecord::Base
     profile.name = user.email
     profile
   end
+
+  # Matching information that will be sent to the queueing backend.
+  def to_queue_json
+    {
+      name: self.name
+    }
+  end
 end
