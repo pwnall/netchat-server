@@ -66,5 +66,7 @@ class QueueController < ApplicationController
     else
       # Bad request.
     end
+
+    head :ok
   end
 end
