@@ -1,10 +1,27 @@
 server = require('ws').Server
 url = require('url')
+http = require('http')
 
 TIMEOUT = 60000
+WEBSOCKET_PORT = 8443
+HTTP_PORT = 9443
 
 connections = {}
 
+### HTTP Server###
+onRequest = (req, res) ->
+  console.log req.body
+  try
+    packet = JSON.parse(req.body)
+    res.writeHead(204)
+    res.end()
+  catch err
+    res.writeHead(500)
+    res.end()
+
+http.createServer(onRequest).listen HTTP_PORT
+
+### WEBSOCKET Server###
 setConnectionTimeout = (connection) ->
   if connection._timeout?
     clearTimeout connection._timeout
@@ -35,6 +52,6 @@ gotConnection = (connection) ->
   else
     connection.close()
 
-wss = new server({port: 9000})
+wss = new server({port: WEBSOCKET_PORT})
 wss.on 'connection', (connection) ->
   gotConnection connection
