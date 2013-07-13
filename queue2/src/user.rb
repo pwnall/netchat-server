@@ -13,7 +13,6 @@ class User
   attr_reader :sessions
 
   def initialize(attrs)
-    p attrs
     @join_key = attrs[:key]
     @match_key = attrs[:match_key]
     @profile = attrs[:profile]

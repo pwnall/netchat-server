@@ -58,10 +58,12 @@ class QueueController
   # @param {Object} options
   # @option options {String} backend the URL of the queueing server
   # @option options {String} key the join key for the current user
+  # @option options {String} matchUrl the URL to visit when matched
   # @option options {Number} enteredAt the time the user joined the queue
   constructor: (options) ->
     @enteredAt = options.enteredAt or (Date.now() / 1000.0)
     @backendUrl = options.backend
+    @matchUrl = options.matchUrl
     @joinKey = options.key
 
     @setupTimers()
@@ -126,8 +128,8 @@ class QueueController
       when 'pong'
         @pingController.onPong data
       when 'match'
-        # TODO(pwnall): matched
         console.log 'Matched'
+        window.location = @matchUrl
     @pingController.resetTimer()
 
   # Sends a ping message to the queue server.

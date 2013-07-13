@@ -15,7 +15,8 @@
   window.queueController = new QueueController({
     backend: <%= @queue_state.backend_url.inspect.html_safe %>,
     key: <%= @queue_state.join_key.inspect.html_safe %>,
-    enteredAt: <%= @queue_entry.entered_at.to_f %>
+    enteredAt: <%= @queue_entry.entered_at.to_f %>,
+    matchUrl: <%= match_url.inspect.html_safe %>
   });
 </script>
 

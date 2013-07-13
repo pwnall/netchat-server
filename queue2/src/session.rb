@@ -60,7 +60,7 @@ class Session
 
   # Tell the client we found a match
   def send_matched
-    respond method: 'matched'
+    respond method: 'match'
   end
 
   # Returns data to the client.
