@@ -44,23 +44,6 @@ module.exports = class WebSocketConnection
     catch err
       this.disconnect()
 
-  replyToId: (id, error, result) ->
-    packet = {}
-
-    if id?
-      packet.id = id
-
-    if error?
-      packet.error = error
-    else
-      packet.result = result
-
-    try
-      this.send packet
-    catch err
-      console.log "We cannot send this packet #{util.inspect.packet} because #{err}"
-      this.replyToId id, "Invalid packet: #{util.inspect err}", null
-
   _addListenersToSocket: () ->
     this._socket.on('message', this._onMessage)
     this._socket.on('error', this._onError)
@@ -74,9 +57,10 @@ module.exports = class WebSocketConnection
   _onMessage: (message) ->
     if typeof(message) == 'string'
       try
-        packet = JSON.parse(messageStr)
+        packet = JSON.parse(message)
       catch err
-        this.replyToId(null, "Invalid json", null)
+        console.log "received invalid json #{util.inspect message}"
+        this.disconnect()
         return
     else
       packet = message

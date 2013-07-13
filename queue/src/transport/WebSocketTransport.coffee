@@ -17,4 +17,4 @@ module.exports = class WebSocketTransport extends EventEmitter
   disconnect: () ->
     if this._socket?._server?
       this._socket.close()
-    this.emit('disconnect', 'this)
+    this.emit('disconnect', this)
