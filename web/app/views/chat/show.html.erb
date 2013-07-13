@@ -113,6 +113,7 @@
     window.chatController = new ChatController({
       backend: <%= @chat_state.backend_url.inspect.html_safe %>,
       key: <%= @chat_state.join_key_for(current_user).inspect.html_safe %>,
+      name: <%= @chat_state.name_for(current_user).inspect.html_safe %>,
       closeUrl: <%= session_url.inspect.html_safe %>
     });
   </script>

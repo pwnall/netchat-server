@@ -46,6 +46,16 @@ class ChatState < ActiveRecord::Base
       nil
     end
   end
+
+  def name_for(user)
+    if user.id == user1_id
+      'blue'
+    elsif user.id == user2_id
+      'purple'
+    else
+      nil
+    end
+  end
 end
 
 # Communication with the queuing backend.

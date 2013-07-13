@@ -64,11 +64,10 @@ class Room
   def relay(from_user, to_user_name, body, client_timestamp)
     message = { relays: [
         { from: from_user.name, body: body, client_ts: client_timestamp }] }
-    @users.each do |name, user|
+    @users.each do |user|
       next unless user.name == to_user_name
-      user.sessions.each do |session|
-        session.respond message if session.room == self
-      end
+      session = user.session
+      session.respond message if session
     end
   end
 

@@ -132,8 +132,11 @@ class ChatController
       if @model.userCount isnt oldCount
         if @model.userCount is 1
           # Wait for the 2nd user to join.
-        else if @model.userCount
-          if @model.lastJoinedName is @name and
+        else if @model.userCount is 2
+          console.log "lastJoinedName #{@model.lastJoinedName}  -- #{@name}"
+
+          #if @model.lastJoinedName is @name and
+          if oldCount is 1 and
               !@rtcController.calling and !@rtcController.answering
             console.log 'Triggering onAvClick'
             @chatView.avView.onAvClick()
