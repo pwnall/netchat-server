@@ -10,4 +10,21 @@ class Match < ActiveRecord::Base
 
   # The match history entries connecting the matched users to this match.
   has_many :match_entries
+
+  # Common logic for closing out the matching.
+  def close!
+    match_entries.each do |entry|
+      unless entry.closed_at
+        entry.closed_at = Time.now
+        entry.save!
+      end
+    end
+
+    if rejected?
+      if chat_state
+        chat_state.remove_from_backend!
+        chat_state.destroy
+      end
+    end
+  end
 end
