@@ -21,7 +21,7 @@ class User < ActiveRecord::Base
   # Add your extensions to the User class here.
 
   # The user's profile information.
-  has_one :profile, dependent: :null
+  has_one :profile, dependent: :nullify
 
   has_many :queue_entries
 
