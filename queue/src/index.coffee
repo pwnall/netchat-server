@@ -3,21 +3,24 @@ url = require('url')
 http = require('http')
 
 TIMEOUT = 60000
-WEBSOCKET_PORT = 8443
-HTTP_PORT = 9443
+WEBSOCKET_PORT = process.env['PORT'] or 8443
+HTTP_PORT = WEBSOCKET_PORT + 100
 
 connections = {}
 
 ### HTTP Server###
-onRequest = (req, res) ->
-  console.log req.body
-  try
-    packet = JSON.parse(req.body)
-    res.writeHead(204)
-    res.end()
-  catch err
-    res.writeHead(500)
-    res.end()
+onRequest = (request, response) ->
+  data = ''
+  request.on 'data', (fragment) -> data += fragment
+  request.on 'end', ->
+    console.log data
+    try
+      packet = JSON.parse(data)
+      response.writeHead(204)
+      response.end()
+    catch err
+      response.writeHead(500)
+      response.end()
 
 http.createServer(onRequest).listen HTTP_PORT
 
@@ -55,3 +58,5 @@ gotConnection = (connection) ->
 wss = new server({port: WEBSOCKET_PORT})
 wss.on 'connection', (connection) ->
   gotConnection connection
+
+console.log "NetChat Queue Server listening on port #{WEBSOCKET_PORT}"

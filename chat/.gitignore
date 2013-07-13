@@ -3,5 +3,7 @@
 *.log
 *.sw*
 
+.DS_Store
+
 # SSL ceritificates for production.
 ssl
