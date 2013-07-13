@@ -1,0 +1,24 @@
+# Vim.
+*.swp
+
+# OSX
+.DS_Store
+
+# Npm modules.
+/node_modules
+
+# Build output.
+/js/*
+/test/js/*
+
+# Node output.
+npm-debug.log
+
+# Documentation output.
+/doc/*.html
+/doc/assets
+/doc/classes
+/doc/files
+
+# Node packaging output.
+netmap-metrics-*.tgz
