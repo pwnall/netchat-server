@@ -17,11 +17,13 @@ class ChatEntry < ActiveRecord::Base
   validates :match, presence: true
   
   # Logistics for connecting two users.
-  has_one :chat_state, through: :match
+  def chat_state
+    match.chat_state
+  end
 
   # The last (most recent) chat history entry.
   def self.last_for(user)
-    MatchEntry.where(user_id: user.id).order(:created_at).reverse_order.first
+    ChatEntry.where(user_id: user.id).order(:created_at).reverse_order.first
   end
 
   # Creates matching entries for a pair of users who started chatting.

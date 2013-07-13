@@ -5,6 +5,7 @@ class ChatController < ApplicationController
   # GET /match
   def show
     @other_profile = @chat_entry.other_user.profile
+    @chat_state = @chat_entry.chat_state
 
     respond_to do |format|
       format.html  # match/show.html.erb

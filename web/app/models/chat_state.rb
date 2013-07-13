@@ -36,6 +36,16 @@ class ChatState < ActiveRecord::Base
     match.chat_state = state
     state
   end
+
+  def join_key_for(user)
+    if user.id == user1_id
+      join_key1
+    elsif user.id == user2_id
+      join_key2
+    else
+      nil
+    end
+  end
 end
 
 # Communication with the queuing backend.
