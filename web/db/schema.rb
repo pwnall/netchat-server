@@ -82,6 +82,8 @@ ActiveRecord::Schema.define(version: 20130713150955) do
     t.integer  "user_id",    null: false
     t.datetime "entered_at", null: false
     t.datetime "left_at"
+    t.boolean  "abandoned"
+    t.integer  "match_id"
   end
 
   add_index "queue_entries", ["user_id", "entered_at"], name: "index_queue_entries_on_user_id_and_entered_at", unique: true, using: :btree

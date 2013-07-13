@@ -1,6 +1,7 @@
 server = require('ws').Server
 url = require('url')
 http = require('http')
+redis = require('redis')
 querystring = require('querystring')
 matching = require('./matching')
 
@@ -10,13 +11,57 @@ HTTP_PORT = WEBSOCKET_PORT + 100
 
 users = {}
 
+### REDIS ###
+sup = redis.createClient()
+consumer = redis.createClient()
+subscribed = false
+packages = []
+
+consumer.on "subscribe", (channel, count) ->
+  subscribed = true
+  if packages?
+    for p in packages
+       sup.publish("channel1", p)
+  packages = []
+
+consumer.on "message", (channel, message) ->
+  msg = message
+  startMatch()
+
+consumer.subscribe("channel1")
+
+publishToRedis = (key) ->
+  if !subscribed
+    packages.push key
+  else
+    sup.publish("channel1", key)
+
+startMatch = () ->
+  sendMatch = (user, result) ->
+    urlobj = url.parse(user.url)
+    params = {mk1: user.match_key, mk2: result.match_key}
+    sendRequest urlobj, params, () ->
+      notifyUser user.key
+      notifyUser result.key
+      delete users[user.key]
+      delete users[result.key]
+
+  keys = Object.keys(users)
+  if keys.length >= 2
+    user1 = users[keys[0]]
+    user2 = users[keys[1]]
+    sendMatch user1, user2
+
+
+# FIXME: need to disconnect the two clients somehow
+
 ### HTTP Server###
 sendRequest = (urlobj, params, callback) ->
   options =
     host: urlobj.hostname,
     port: urlobj.port,
     path: "#{urlobj.path}?#{querystring.stringify(params)}"
-    method: 'GET'
+    method: 'POST'
   http.request options, (res) ->
     if callback?
       callback()
@@ -33,6 +78,11 @@ sendLeftQueue = (key) ->
       sendRequest urlobj, params, callback
 
 onRequest = (request, response) ->
+  if request.url is "/user_left"
+    response.writeHead(204)
+    response.end()
+    return
+
   data = ''
   request.on 'data', (fragment) -> data += fragment
   request.on 'end', ->
@@ -52,7 +102,7 @@ onRequest = (request, response) ->
 http.createServer(onRequest).listen HTTP_PORT
 
 ### WEBSOCKET Server###
-notifyUser = (key, matched_key) ->
+notifyUser = (key) ->
   # if the user hasn't left
   if users[key]?
     response =
@@ -62,7 +112,9 @@ notifyUser = (key, matched_key) ->
 setConnectionTimeout = (connection) ->
   if connection._timeout?
     clearTimeout connection._timeout
-  connection._timeout = setTimeout connection.close, TIMEOUT
+  callback = () ->
+    connection.close()
+  connection._timeout = setTimeout callback, TIMEOUT
 
 gotMessage = (connection, message) ->
   if typeof(message) == 'string'
@@ -82,7 +134,6 @@ gotConnection = (connection) ->
   urlobj = url.parse(connection.upgradeReq.url)
   if urlobj.pathname is "/queue" and urlobj.query.slice(0, 3) is "key"
     key = urlobj.query.slice(4)
-    console.log users
     if !users[key]?
       connection.send "Invalid user"
       connection.close()
@@ -90,11 +141,8 @@ gotConnection = (connection) ->
 
     user = users[key]
     user.connection = connection
-    matching.match user, (err, result) ->
-      urlobj = url.parse(user.url)
-      params = {MK1: user.match_key, MK2: result.match_key}
-      sendRequest urlobj, params, () ->
-        notifyUser key, result.key
+    publishToRedis key
+
     connection.on 'message', (message) ->
       gotMessage connection, message
     setConnectionTimeout connection
