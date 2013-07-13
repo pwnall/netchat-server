@@ -7,32 +7,29 @@ module Chatty
 class Session
   attr_reader :user
   attr_reader :room
-  attr_reader :name_color
   attr_accessor :av_nonce
 
   def initialize(web_socket, nexus)
     @ws = web_socket
     @nexus = nexus
     @user = nil
-    @room = nil
     @nonces = Set.new
 
-    @name_color = nil  # Set by the user.
     @av_nonce = nil    # Set by the user.
   end
 
   # Called after the WebSocket handshake completes.
   def connected(query)
-    user_name = query['name']
-    room_name = query['room']
-    @name_color = query['name_color'] || '000000'
-    if user_name && room_name
-      @nexus.user_named user_name do |user|
-        @user = user
-        @nexus.room_named room_name do |room|
-          @room = room
-          @user.add_session self
-          respond list: { title: @room.name, presence: @room.presence_info }
+    join_key = query['key']
+    if join_key
+      @nexus.user_by_key join_key do |user|
+        if user && !user.session
+          @user = user
+          @room = user.room
+          @user.set_session self
+          respond hi: 'ok'
+        else
+          @ws.close_websocket
         end
       end
     else
@@ -43,7 +40,7 @@ class Session
   # Called when the client closes the WebSocket.
   def closed
     if @user && @room
-      @user.remove_session self
+      @user.remove_session
       @room = nil
     end
   end
@@ -59,7 +56,7 @@ class Session
     when 'text'
       return if @nonces.include?(data[:nonce])
       @nonces << data[:nonce]
-      room.message @user, data[:text], @name_color, data[:client_ts]
+      room.message @user, data[:text], name_color, data[:client_ts]
     when 'av-invite', 'av-accept', 'av-close'
       return if @nonces.include?(data[:nonce])
       @nonces << data[:nonce]
@@ -89,6 +86,12 @@ class Session
 
     room.av_event @user, message_data[:type], message_data[:av_nonce],
                   @name_color, message_data[:client_ts]
+  end
+
+  # The color of this user's messages.
+  def name_color
+    # HACK(pwnall): come up with better colors
+    user.key == @room.user1.key ? 'red' : 'blue'
   end
 
   # Returns a JSON hash describing the session info for this user.

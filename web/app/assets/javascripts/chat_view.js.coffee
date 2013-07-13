@@ -8,6 +8,11 @@ class AvView
     @$remoteVideo = $('video.remote', @$avContainer)
     @remoteVideo = @$remoteVideo[0]
 
+    # HACK(pwnall): avoid NPEs until we have both local and remote <video>s
+    unless @remoteVideo
+      @remoteVideo = @localVideo
+      @$remoteVideo = @$localVideo
+
     @$partnerName = $('.partner-name', box)
     @$avButton = $('.av-button', box)
     @$avButton.click (event) => @onAvClick event
@@ -56,32 +61,27 @@ class AvView
 
 # The view for a chat box.
 class ChatView
-  constructor: (box: box, emoticons: @emoticons) ->
-    @onMessageSubmission = ->
+  constructor: ->
+    @onMessageSubmission = -> null
+
+    @$box = box = $ '#chat-box'
 
     @$style = $('style', box)
     @cssClasses = {}
 
-    @$box = $(box)
-
-    @$form = $('.composer', box)
-    @$sendButton = $('.send-button', box)
-    @$history = $('.history', box)
-    @$message = $('.composer .message', box)
+    @$form = $('#chat-composer', box)
+    @$sendButton = $('#chat-send-button', box)
+    @$history = $('#chat-history', box)
+    @$message = $('#chat-composer .message', box)
     @$message.val ''
 
     @roomVersion = null
-    @$title = $('.room-title', box)
-    @$users = $('.user-list', box)
 
     @$form.keydown (event) => @onKeyDown event
     @$sendButton.click (event) => @onSendClick event
     @$box.click (event) =>
       @$message.focus()
       event.preventDefault()
-
-    @statusView = new StatusView box
-    @desktopNotifications = new DesktopNotifications box, @$message
 
     @avView = new AvView box
     @avAcceptHandler = (event) => @avView.onAvAcceptClick event
@@ -110,32 +110,6 @@ class ChatView
     else if last < model.lastEventId
       for eventId in [(last + 1)..model.lastEventId]
         @appendEvent(model.getEvent(eventId))
-
-    if @roomVersion != model.roomInfoVersion()
-      @roomVersion = model.roomInfoVersion()
-      roomInfo = model.getRoomInfo()
-      if roomInfo.title
-        @$title.text roomInfo.title
-      users = roomInfo.users
-      users.sort (a, b) -> a.name.localeCompare(b.name)
-      @$users.empty()
-      for userInfo in users
-        $li = $ "<li class=\"#{@cssClassFor(userInfo)}\">" +
-            '<i class="icon-user icon-large"></i> ' +
-            '<span class="name"></span> ' +
-            '<button type="button">' +
-            '<i class="icon-facetime-video icon-large"></i>' +
-            ' Join video chat</button></li>'
-        $('.name', $li).text userInfo.name
-        if userInfo.av_nonce
-          $('button', $li).attr('title', "Videochat with #{userInfo.name}").
-              attr('data-av-partner', userInfo.name).
-              attr('data-av-nonce', userInfo.av_nonce).
-              click @avAcceptHandler
-        else
-          $('button', $li).addClass 'hidden'
-        $li.attr 'data-name', userInfo.name
-        @$users.append $li
 
   appendEvent: (event) ->
     cssClass = @cssClassFor event
@@ -172,8 +146,6 @@ class ChatView
       $dom.attr 'title', 'This message was delayed by the Internet. ' +
                          'It may be out of context.'
     @$history.prepend $dom
-
-    @desktopNotifications.serverEvent event
 
   cssClassFor: (event) ->
     key = event.name_color || '000000'
@@ -213,20 +185,14 @@ class ChatView
 
     @cssClasses[key] = className
 
-
   lastEventId: ->
     attr = $('li:first-child', @$history).attr('data-id')
     if attr then parseInt(attr) else null
 
   messageDom: (text) ->
     $dom = $('<span class="message" />')
-    tokens = @emoticons.parseText text
-    for token in tokens
-      if token instanceof Element
-        $dom.append token
-      else
-        $span = $('<span class="text">')
-        $span.text(token)
-        $dom.append $span
+    $dom.text text
     $dom
 
+
+window.ChatView = ChatView

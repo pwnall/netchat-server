@@ -1,21 +1,21 @@
 # The view for a chat box.
 class ChatView
-  constructor: (box: box, emoticons: @emoticons) ->
+  constructor: ->
     @onMessageSubmission = ->
 
+    box = $ '#chat-box'
     @$style = $('style', box)
     @cssClasses = {}
 
-    @$box = $(box)
+    @$box = $ '#chat-box'
 
-    @$form = $('.composer', box)
-    @$sendButton = $('.send-button', box)
-    @$history = $('.history', box)
-    @$message = $('.composer .message', box)
+    @$form = $('#chat-composer', box)
+    @$sendButton = $('#chat-send-button', box)
+    @$history = $('#chat-history', box)
+    @$message = $('#chat-composer .message', box)
     @$message.val ''
 
     @roomVersion = null
-    @$title = $('.room-title', box)
     @$users = $('.user-list', box)
 
     @$form.keydown (event) => @onKeyDown event
@@ -54,32 +54,6 @@ class ChatView
     else if last < model.lastEventId
       for eventId in [(last + 1)..model.lastEventId]
         @appendEvent(model.getEvent(eventId))
-
-    if @roomVersion != model.roomInfoVersion()
-      @roomVersion = model.roomInfoVersion()
-      roomInfo = model.getRoomInfo()
-      if roomInfo.title
-        @$title.text roomInfo.title
-      users = roomInfo.users
-      users.sort (a, b) -> a.name.localeCompare(b.name)
-      @$users.empty()
-      for userInfo in users
-        $li = $ "<li class=\"#{@cssClassFor(userInfo)}\">" +
-            '<i class="icon-user icon-large"></i> ' +
-            '<span class="name"></span> ' +
-            '<button type="button">' +
-            '<i class="icon-facetime-video icon-large"></i>' +
-            ' Join video chat</button></li>'
-        $('.name', $li).text userInfo.name
-        if userInfo.av_nonce
-          $('button', $li).attr('title', "Videochat with #{userInfo.name}").
-              attr('data-av-partner', userInfo.name).
-              attr('data-av-nonce', userInfo.av_nonce).
-              click @avAcceptHandler
-        else
-          $('button', $li).addClass 'hidden'
-        $li.attr 'data-name', userInfo.name
-        @$users.append $li
 
   appendEvent: (event) ->
     cssClass = @cssClassFor event
@@ -164,12 +138,5 @@ class ChatView
 
   messageDom: (text) ->
     $dom = $('<span class="message" />')
-    tokens = @emoticons.parseText text
-    for token in tokens
-      if token instanceof Element
-        $dom.append token
-      else
-        $span = $('<span class="text">')
-        $span.text(token)
-        $dom.append $span
+    $dom.text text
     $dom

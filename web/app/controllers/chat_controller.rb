@@ -14,12 +14,14 @@ class ChatController < ApplicationController
 
   # PUT /chat/leave
   def leave
-
+    current_user.leave_chat! true
+    redirect_to profile_path
   end
 
 
   # POST /chat/closed
   def closed
+    head :ok
   end
 
   def ensure_user_is_chatting

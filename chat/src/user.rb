@@ -34,6 +34,7 @@ class User
     # NOTE: might be nice to check that the room is not assigned
     @room = new_room
   end
+
 end  # class Chatty::User
 
 end  # namespace Chatty

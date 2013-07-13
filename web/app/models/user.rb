@@ -72,6 +72,14 @@ class User
     last_match_entry = MatchEntry.last_for self
     last_match_entry && !last_match_entry.closed_at
   end
+
+  def remove_from_matching!
+    match_entry = MatchEntry.last_for self
+    return unless match_entry
+
+    match_entry.closed_at = Time.now
+    match_entry.save!
+  end
 end
 
 
@@ -80,5 +88,26 @@ class User
   def chatting?
     last_chat_entry = ChatEntry.last_for self
     last_chat_entry && !last_chat_entry.closed_at
+  end
+
+  def leave_chat!(remove_from_backend)
+    chat_entry = ChatEntry.last_for self
+    return unless chat_entry
+
+    remove_from_chatting!
+
+    chat_state = chat_entry.chat_state
+    if chat_state
+      chat_state.remove_from_backend if remove_from_backend
+      chat_state.destroy
+    end
+  end
+
+  def remove_from_chatting!
+    chat_entry = ChatEntry.last_for self
+    return unless chat_entry
+
+    chat_entry.closed_at = Time.now
+    chat_entry.save!
   end
 end

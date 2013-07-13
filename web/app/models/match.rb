@@ -11,6 +11,9 @@ class Match < ActiveRecord::Base
   # The match history entries connecting the matched users to this match.
   has_many :match_entries
 
+  # The chat history entries connecting the matched users to this match.
+  has_many :chat_entries
+
   # Common logic for closing out the matching.
   def close!
     match_entries.each do |entry|
