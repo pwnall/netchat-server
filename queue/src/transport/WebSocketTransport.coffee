@@ -2,9 +2,9 @@ wss = require('ws').Server
 EventEmitter = require('events').EventEmitter
 WebSocketConnection = require('./WebSocketConnection')
 
-
 module.exports = class WebSocketTransport extends EventEmitter
   constructor: ({host, port}) ->
+    self = this
     self._socket = new wss({host, port})
     self._socket.on 'connection', (socket) ->
       console.log "Got WebSocketConnection"

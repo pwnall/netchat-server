@@ -1,5 +1,5 @@
-WebSocketTransport = require('./transport/WebSocketTransport').WebSocketTransport
-config = require('./config')
+WebSocketTransport = require('./transport/WebSocketTransport')
+#config = require('./config')
 
 gotWebSocketMessage = (message, connection) ->
   console.log message
@@ -12,6 +12,6 @@ gotWebSocketConnection =  (connection) ->
     connection.removeAllListeners()
 
 # set up websocket server
-websocketTransport = new WebSocketTransport config.websocket
+websocketTransport = new WebSocketTransport({host: "localhost", port: 9000})
 console.log "WebSocket server started"
 websocketTransport.on 'connection', gotWebSocketConnection

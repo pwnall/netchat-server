@@ -1,3 +1,4 @@
+EventEmitter = require('events').EventEmitter
 wss = require('ws').Server
 util = require('util')
 uuid = require('node-uuid').v4
@@ -6,7 +7,7 @@ safeStringify = (frame) ->
   return JSON.stringify(frame).replace (/[\uD800-\uDFFF]/g), (chr, pos, str) ->
     "\\u"+("0000"+chr.charCodeAt(0).toString(16)).slice(-4)
 
-module.exports = class WebSocketConnection
+module.exports = class WebSocketConnection extends EventEmitter
 
   constructor: (socket) ->
     this._id = uuid()
