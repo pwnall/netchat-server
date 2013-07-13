@@ -6,7 +6,12 @@
       Facebook
     </span>
     <span>
-      connected
+      <% if @profile.has_facebook %>
+        connected
+      <% else %>
+        <%= link_to 'Connect', profile_add_facebook_path, class: :button,
+                               method: :put %>
+      <% end %>
     </span>
   </li>
   <li>
@@ -14,7 +19,12 @@
       LinkedIn
     </span>
     <span>
-      <button>connect</button>
+      <% if @profile.has_linkedin %>
+        connected
+      <% else %>
+        <%= link_to 'Connect', profile_add_linkedin_path, class: :button,
+                               method: :put %>
+      <% end %>
     </span>
   </li>
 <ul>

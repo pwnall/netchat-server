@@ -10,6 +10,11 @@ module UserFilters
     bounce_user unless current_user
   end
 
+  # before_filter that only lets users that have a profile through.
+  def ensure_user_has_profile
+    bounce_user unless current_user and current_user.profile
+  end
+
   # before_filter that only lets admins through.
   def ensure_user_is_admin
     bounce_user unless current_user and current_user.admin?
