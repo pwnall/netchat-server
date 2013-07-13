@@ -12,10 +12,10 @@ class ChatState < ActiveRecord::Base
 
   # The other user that the chat state is built for.
   belongs_to :user2, class_name: 'User'
-  validates :users2, presence: true
+  validates :user2, presence: true
 
   # Create a chat room for two matched users.
-  def self.create_for(match)
+  def self.create_for(match, hostname)
     match_entry = match.match_entries.first
     user1, user2 = match_entry.user, match_entry.other_user
     if user1.id > user2.id
@@ -27,12 +27,13 @@ class ChatState < ActiveRecord::Base
     state.user1 = user1
     state.user2 = user2
     state.room_key = SecureRandom.urlsafe_base64 32
-    state.user1_key = SecureRandom.urlsafe_base64 32
-    state.user2_key = SecureRandom.urlsafe_base64 32
-    backend = Backend.queue hostname
+    state.join_key1 = SecureRandom.urlsafe_base64 32
+    state.join_key2 = SecureRandom.urlsafe_base64 32
+    backend = Backend.chat hostname
     state.backend_url = backend[:url]
     state.backend_http_url = backend[:http_url]
     state.save!
+    match.chat_state = state
     state
   end
 end
@@ -43,7 +44,9 @@ class ChatState
     json_body = {
       room_key: room_key,
       join_key1: join_key1,
+      name1: 'blue',
       join_key2: join_key2,
+      name2: 'purple',
       close_url: chat_closed_url
     }
     response = send_json "#{backend_http_url}/room", json_body

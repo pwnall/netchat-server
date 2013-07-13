@@ -1,17 +1,21 @@
-ActiveAdmin.register QueueState do
+ActiveAdmin.register ChatState do
   index do
-    column :user_id
+    column :match_id
+    column :room_key
+    column :user1
+    column :join_key1
+    column :user2
+    column :join_key2
     column :backend_url
     column :backend_http_url
-    column :join_key
-    column :match_key
+    column :created_at
     default_actions
   end
 
   filter :email
 
   form do |f|
-    f.inputs "QueueState Details" do
+    f.inputs "ChatState Details" do
       f.input :user_id
       f.input :backend_url, as: :url
       f.input :backend_http_url, as: :url
@@ -29,3 +33,4 @@ ActiveAdmin.register QueueState do
     end
   end
 end
+

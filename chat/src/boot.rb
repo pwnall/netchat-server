@@ -3,7 +3,7 @@
 # Activate gems.
 require 'rubygems'
 require 'bundler'
-Bundler.setup :default, :chat
+Bundler.setup :default
 require 'active_support/core_ext'
 require 'em-mongo'
 require 'eventmachine'
@@ -18,10 +18,12 @@ EventMachine.run do
   # Set up the components.
   log = Logger.new STDERR
   log.level = ENV['DEBUG'] ? Logger::DEBUG : Logger::INFO
-  db = EventMachine::Mongo::Connection.new('localhost').db('chatty')
+  db = nil  # TODO(pwnall): hookup whatever db we're using
   nexus = Chatty::Nexus.new db, log
   ws_server = Chatty::WebSocketServer.new nexus
+  http_server = Chatty::HttpServer.new nexus
 
   # Event loop.
   ws_server.run
+  http_server.run
 end

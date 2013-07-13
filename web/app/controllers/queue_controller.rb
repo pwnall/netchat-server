@@ -60,6 +60,8 @@ class QueueController < ApplicationController
       queue_state2 = QueueState.for_match_key params[:mk2]
       if queue_state1 && queue_state2
         MatchEntry.create_pair queue_state1.user, queue_state2.user
+        queue_state1.user.remove_from_queue!
+        queue_state2.user.remove_from_queue!
       else
         # At least one of the users just left the matching process.
 

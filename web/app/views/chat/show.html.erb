@@ -1,0 +1,17 @@
+<h2>Chat</h2>
+
+<p><%= @other_profile.name %></p>
+
+<p>
+  <%= link_to 'Accept', match_accept_path, class: 'button', method: :put %>
+  <%= link_to 'Reject', match_reject_path, class: 'button', method: :put %>
+</p>
+
+<script type="text/javascript">
+  window.chatController = new ChatController({
+    backend: <%= @chat_state.backend_url.inspect.html_safe %>,
+    key: <%= @chat_state.join_key.inspect.html_safe %>,
+    closeUrl: <%= session_url.inspect.html_safe %>
+  });
+</script>
+

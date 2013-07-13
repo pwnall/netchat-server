@@ -15,7 +15,7 @@ class WebSocketServer
     @host ||= '0.0.0.0'
   end
   def port
-    @port ||= (ENV['PORT'] ? ENV['PORT'].to_i : 9494)
+    @port ||= (ENV['PORT'] ? ENV['PORT'].to_i : 9443)
   end
 
   def run

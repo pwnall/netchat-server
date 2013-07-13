@@ -12,7 +12,14 @@ class MatchController < ApplicationController
 
   # PUT /match/accept
   def accept
-
+    match = @match_entry.match
+    unless match.chat_state
+      chat_state = ChatState.create_for match, request.host
+      ChatEntry.create_pair match
+      chat_state.push_to_backend chat_closed_url
+      match.chat_state = chat_state
+    end
+    redirect_to chat_path
   end
 
   # PUT /match/reject

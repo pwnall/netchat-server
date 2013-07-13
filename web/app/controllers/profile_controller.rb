@@ -8,6 +8,8 @@ class ProfileController < ApplicationController
       redirect_to queue_path
     elsif current_user.matched?
       redirect_to match_path
+    elsif current_user.chatting?
+      redirect_to chat_path
     else
       respond_to do |format|
         format.html  # profile/show.html.erb

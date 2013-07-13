@@ -1,22 +1,22 @@
-ActiveAdmin.register MatchEntry do
+ActiveAdmin.register ChatEntry do
   index do
     column :user
     column :other_user
+    column :match_id
     column :created_at
     column :closed_at
-    column :rejected
     default_actions
   end
 
   filter :email
 
   form do |f|
-    f.inputs "MatchEntry Details" do
+    f.inputs "ChatEntry Details" do
       f.input :user_id
       f.input :other_user_id
+      f.input :match_id
       f.input :created_at, as: :datetime
       f.input :closed_at, as: :datetime
-      f.input :rejected, as: :checkbox
     end
     f.actions
   end

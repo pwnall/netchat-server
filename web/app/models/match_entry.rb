@@ -42,10 +42,10 @@ class MatchEntry < ActiveRecord::Base
     [entry1, entry2]
   end
 
-  def accept()
+  def accept
   end
 
-  def reject()
+  def reject
     match.rejected = true
     match.save!
 

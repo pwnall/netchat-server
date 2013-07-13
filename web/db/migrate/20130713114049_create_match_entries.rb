@@ -10,5 +10,6 @@ class CreateMatchEntries < ActiveRecord::Migration
     end
 
     add_index :match_entries, [:user_id, :created_at], unique: true
+    add_index :match_entries, :match_id, unique: false
   end
 end

@@ -47,14 +47,23 @@ class User
     queue_entry = QueueEntry.last_for self
     return unless queue_entry
 
-    queue_entry.left_at = Time.now
-    queue_entry.save!
+    remove_from_queue!
 
     queue_state = QueueState.for_user self
     queue_state.remove_from_backend if remove_from_backend
     queue_state.destroy if queue_state
   end
+
+  # Updates queue entries to reflect the fact that the user is no longer queued.
+  def remove_from_queue!
+    queue_entry = QueueEntry.last_for self
+    return unless queue_entry
+
+    queue_entry.left_at = Time.now
+    queue_entry.save!
+  end
 end
+
 
 # Match accepting.
 class User
@@ -63,6 +72,13 @@ class User
     last_match_entry = MatchEntry.last_for self
     last_match_entry && !last_match_entry.closed_at
   end
+end
 
 
+# Chatting
+class User
+  def chatting?
+    last_chat_entry = ChatEntry.last_for self
+    last_chat_entry && !last_chat_entry.closed_at
+  end
 end

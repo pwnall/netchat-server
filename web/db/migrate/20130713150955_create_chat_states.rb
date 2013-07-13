@@ -10,7 +10,7 @@ class CreateChatStates < ActiveRecord::Migration
       t.string :join_key1, null: false
       t.string :join_key2, null: false
 
-      t.timestamps
+      t.datetime :created_at, null: false
     end
 
     add_index :chat_states, :match_id, unique: true

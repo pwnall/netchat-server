@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20130713150955) do
+ActiveRecord::Schema.define(version: 20130713173536) do
 
   create_table "backends", force: true do |t|
     t.string   "kind",       limit: 16,  null: false
@@ -20,6 +20,17 @@ ActiveRecord::Schema.define(version: 20130713150955) do
     t.datetime "created_at"
     t.datetime "updated_at"
   end
+
+  create_table "chat_entries", force: true do |t|
+    t.integer  "user_id",       null: false
+    t.integer  "other_user_id", null: false
+    t.integer  "match_id",      null: false
+    t.datetime "created_at",    null: false
+    t.datetime "closed_at"
+  end
+
+  add_index "chat_entries", ["match_id"], name: "index_chat_entries_on_match_id", using: :btree
+  add_index "chat_entries", ["user_id", "created_at"], name: "index_chat_entries_on_user_id_and_created_at", unique: true, using: :btree
 
   create_table "chat_states", force: true do |t|
     t.integer  "match_id"
@@ -30,8 +41,7 @@ ActiveRecord::Schema.define(version: 20130713150955) do
     t.string   "room_key",         null: false
     t.string   "join_key1",        null: false
     t.string   "join_key2",        null: false
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",       null: false
   end
 
   add_index "chat_states", ["match_id"], name: "index_chat_states_on_match_id", unique: true, using: :btree
@@ -66,6 +76,7 @@ ActiveRecord::Schema.define(version: 20130713150955) do
     t.boolean  "rejected"
   end
 
+  add_index "match_entries", ["match_id"], name: "index_match_entries_on_match_id", using: :btree
   add_index "match_entries", ["user_id", "created_at"], name: "index_match_entries_on_user_id_and_created_at", unique: true, using: :btree
 
   create_table "matches", force: true do |t|
