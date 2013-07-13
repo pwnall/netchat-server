@@ -1,40 +1,115 @@
-<% if flash[:notice] %>
-<p class="notice"><%= flash[:notice] %></p>
-<% end %>
-<% if flash[:alert] %>
-<p class="alert"><%= flash[:alert] %></p>
-<% end %>
+<div class="row">
+  <div class="large-12 columns">
 
-<% if @redirect_url %>
-<p>
-  We need you to log in before we can show you the page that you are trying to
-  view.
-</p>
-<% end %>
+    <!-- Navigation -->
 
-<%= form_tag session_path do %>
-  <div class="field">
-    <%= label_tag :email, 'Email Address' %><br />
-    <span class="value">
-      <%= email_field_tag :email, @email, :autofocus => true, :required => true,
-            :placeholder => 'your@email.com' %>
-    </span>
+      <nav class="top-bar">
+        <ul class="title-area">
+          <!-- Title Area -->
+          <li class="name">
+            <h1>
+              <a href="../index.html">
+                ProMeet
+              </a>
+            </h1>
+          </li>
+          <li class="toggle-topbar menu-icon"><a href="#"><span>menu</span></a></li>
+        </ul>
+
+        <section class="top-bar-section">
+          <ul class="right">
+            <li><a href="faq.html">FAQ</a></li>
+           </ul>
+
+        </section>
+    </nav>
+
+    <!-- End Navigation -->
+
+    </div>
   </div>
 
-  <div class="field">
-    <%= label_tag :password %><br />
-    <span class="value">
-      <%= password_field_tag :password %>
-    </span>
-  </div>
 
-  <div class="actions">
-    <%= button_tag 'Log in', :name => 'login', :value => 'requested' %>
-    <%= button_tag 'Reset Password', :name => 'reset_password',
-          :value => 'requested', :formaction => reset_password_session_path %>
+<div class="row">
 
-    <% if @redirect_url %>
-    <%= hidden_field_tag :redirect_url, @redirect_url %>
-    <% end %>
-  </div>
-<% end %>
+    <div class="row">
+      <div class="small-12 columns">
+	<div class="row" align="center">
+	  <h4>Sign In</h4>
+	</div>
+      </div>
+    </div>
+    <br>
+
+    <div class="row">
+      <div class="large-12 columns">
+        <% if flash[:notice] %>
+        <p class="notice"><%= flash[:notice] %></p>
+        <% end %>
+        <% if flash[:alert] %>
+        <p class="alert"><%= flash[:alert] %></p>
+        <% end %>
+
+        <% if @redirect_url %>
+        <p align="center">
+          We need you to log in before we can show you the page that you are trying to
+          view.
+        </p>
+        <% end %>
+	<div class="row" align="left">
+	  <div class="small-3 columns">
+	    <p></p>
+	  </div>
+	  <div class="small-6 columns">
+      <%= form_tag session_path do %>
+        <div class="field">
+          <%= label_tag :email, 'Email Address' %><br />
+          <span class="value">
+            <%= email_field_tag :email, @email, :autofocus => true, :required => true,
+                  :placeholder => 'your@email.com' %>
+          </span>
+        </div>
+
+        <div class="field">
+          <%= label_tag :password %><br />
+          <span class="value">
+            <%= password_field_tag :password %>
+          </span>
+        </div>
+
+        <div class="actions">
+          <%= button_tag 'Log in', :name => 'login', :value => 'requested' %>
+          <%= button_tag 'Reset Password', :name => 'reset_password',
+                :value => 'requested', :formaction => reset_password_session_path %>
+
+          <% if @redirect_url %>
+          <%= hidden_field_tag :redirect_url, @redirect_url %>
+          <% end %>
+        </div>
+      <% end %>
+	  </div>
+	  <div class="small-3 columns">
+	  </div>
+	</div>
+      </div>
+    </div>
+
+    <!-- Footer -->
+
+  <footer class="row">
+    <div class="large-12 columns">
+      <hr>
+      <div class="row">
+        <div class="large-6 columns">
+          <p>&copy; Copyright 2013. The Hack.</p>
+        </div>
+        <div class="large-6 columns">
+          <ul class="inline-list right">
+            <li><a href="aboutus.html">About Us</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+    <!-- End Footer -->

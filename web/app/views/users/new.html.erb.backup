@@ -1,0 +1,4 @@
+<h1>Register for Hangouts</h1>
+
+<%= render 'form' %>
+
