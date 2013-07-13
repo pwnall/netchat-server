@@ -13,7 +13,9 @@
               </a>
             </h1>
           </li>
-          <li class="toggle-topbar menu-icon"><a href="#"><span>menu</span></a></li>
+          <li class="toggle-topbar menu-icon">
+            <a href="#"><span>menu</span></a>
+          </li>
         </ul>
 
         <section class="top-bar-section">
@@ -28,48 +30,53 @@
     </div>
   </div>
 
-  <div class="row">  
-    <div class="large-8 columns">
-<h5>On air</h5>
-      <div class="row">
-	<video src="video/puppy.mp4"
-	       poster="images/puppy.jpg"
-	       width="640" height="400"
-	       preload
-	       controls
-	       loop>
-	</video>
+  <div class="row" id="chat-box">  
+    <section class="av-container">
+      <div class="large-8 columns" id="video-section">
+        <h5>On air</h5>
+
+        <div class="row">
+          <video class="local" src="video/"
+                 poster="images/puppy.jpg"
+                 width="640" height="400">
+          </video>
+        </div>
+        <div class="row">
+          <div class="large-11 columns">
+            <div class="large-2 columns" align="left">
+              <%= @other_profile.name %>
+            </div>
+            <div class="large-6 columns" align="right">
+              Job, Company
+            </div>
+          </div>
+        </div>
       </div>
-      <div class="row">
-	<div class="large-11 columns">
-	  <div class="large-2 columns" align="left">
-	    <%= @other_profile.name %>
-	  </div>
-	  <div class="large-6 columns" align="right">
-	    Job, Company
-	  </div>
-	</div>
+
+      <div class="large-4 columns">
+        <div class="row">
+          <form action="http://www.example.com/comments.php">
+            <h6>Chat history</h6>
+            <textarea name="comments" cols="20" rows="9" readonly></textarea>
+          </form>
+        </div>
+        <div class="row">
+          <form action="http://www.example.com/comments.php"> <h6>Input area</h6>
+            <textarea name="comments" cols="20" rows="4"></textarea>
+          </form>
+        </div>
+        <div class="row" align="right">
+          <a href="#" class="radius small button">Send</a>
+        </div>
+        <br>
+        <div class="row" align="right">
+          <a href="#" class="radius tiny secondary button">Report</a>
+          <a href="#" class="radius tiny secondary button">Leave</a>
+        </div>
       </div>
-    </div>
-    <div class="large-4 columns">
-      <div class="row">
-	<form action="http://www.example.com/comments.php"> <h6>Chat history</h6>
-	  <textarea name="comments" cols="20" rows="9" readonly></textarea> </form>
-      </div>
-      <div class="row">
-	<form action="http://www.example.com/comments.php"> <h6>Input area</h6>
-	  <textarea name="comments" cols="20" rows="4"></textarea> </form>
-      </div>
-      <div class="row" align="right">
-	<a href="#" class="radius small button">Send</a>
-      </div>
-      <br>
-      <div class="row" align="right">
-	<a href="#" class="radius tiny secondary button">Report</a>
-	<a href="#" class="radius tiny secondary button">Force quit</a>
-      </div>
-    </div>
+    </section>
   </div>
+
   <br>
   
   <div class="row">
@@ -95,6 +102,7 @@
       </div>
     </div>
   </footer>
+
   <script type="text/javascript">
     window.chatController = new ChatController({
       backend: <%= @chat_state.backend_url.inspect.html_safe %>,
