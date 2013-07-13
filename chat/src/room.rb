@@ -4,18 +4,18 @@ module Chatty
 # Connects two users.
 class Room
   attr_reader :key
-  attr_reader :join_key1
-  attr_reader :join_key2
+  attr_reader :user1
+  attr_reader :user2
 
   def ack_new_session(session)
     user = session.user
-    event :type => 'join', :name => user.name, :name_color => session.name_color
+    event type: 'join', name: user.name, name_color: session.name_color
     nil
   end
 
   def ack_closed_session(session)
     user = session.user
-    event :type => 'part', :name => user.name, :name_color => session.name_color
+    event type: 'part', name: user.name, name_color: session.name_color
     nil
   end
 
@@ -78,7 +78,7 @@ class Room
     @user1 = attrs[:user1]
     @user2 = attrs[:user2]
 
-    @events = {}
+    @events = []
     @next_event_id = 0
     @users = [@user1, @user2]
   end
@@ -101,7 +101,7 @@ class Room
     @events << event
 
     # Broadcast the event to users.
-    @users.each do |name, user|
+    @users.each do |user|
       next unless user.session
       user.session.sync_events
     end

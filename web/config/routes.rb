@@ -17,7 +17,8 @@ Hangouts::Application.routes.draw do
   put 'match/reject' => 'match#reject', as: :match_reject
 
   get 'chat' => 'chat#show', as: :chat
-  get 'chat/closed' => 'chat#closed', as: :chat_closed
+  put 'chat/leave' => 'chat#leave', as: :chat_leave
+  post 'chat/closed' => 'chat#closed', as: :chat_closed
 
   get 'ratings' => 'ratings#show', as: :ratings
 
