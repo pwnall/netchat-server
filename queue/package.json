@@ -26,7 +26,10 @@
     "less": ">= 1.3.3",
     "pg": ">= 1.0.2",
     "remove": "0.1.5",
-    "source-map-support": ">= 0"
+    "source-map-support": ">= 0",
+    "ws": "git+ssh://git@github.com:Orchestra/ws-compressed.git",
+    "node-uuid": "1.3.x",
+    "underscore": "1.3.x"
   },
   "devDependencies": {
     "chai": ">= 1.5.0",
