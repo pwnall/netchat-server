@@ -1,6 +1,8 @@
 server = require('ws').Server
 url = require('url')
 http = require('http')
+querystring = require('querystring')
+matching = require('./matching')
 
 TIMEOUT = 60000
 WEBSOCKET_PORT = process.env['PORT'] or 8443
@@ -9,21 +11,34 @@ HTTP_PORT = WEBSOCKET_PORT + 100
 users = {}
 
 ### HTTP Server###
+sendRequest = (urlobj, params) ->
+  options =
+    host: urlobj.hostname,
+    port: urlobj.port,
+    path: "#{urlobj.path}?#{querystring.stringify(params)}"
+    method: 'GET'
+  http.request options, (res) ->
+    return
+  .end()
+
 sendLeftQueue = (key) ->
-  res_url = users[key]?.url
-  if res_url?
-    urlobj = url.parse(res_url)
-    options =
-      host: urlobj.hostname,
-      port: urlobj.port,
-      path: urlobj.path + "?LEFT_MK=#{users[key].match_key}"
-      method: 'GET'
-    http.request options, (res) ->
-      return
-    .end()
+  if users[key]?
+    res_url = users[key]?.url
+    if res_url?
+      urlobj = url.parse(res_url)
+      params = {LEFT_MK: users[key].match_key}
+      sendRequest urlobj, params
+    delete users[key]
 
 parsePacket = (packet) ->
   key = packet.key
+  ###
+  matching.match packet, (err, result) ->
+    urlobj = url.parse(packet.url)
+    params = {MK1: packet.match_key, MK2: result.match_key}
+    sendRequest urlobj params
+    delete users[key]
+  ###
   delete packet["key"]
   users[key] = packet
 
@@ -68,6 +83,7 @@ gotConnection = (connection) ->
   urlobj = url.parse(connection.upgradeReq.url)
   if urlobj.pathname is "/queue" and urlobj.query.slice(0, 3) is "key"
     key = urlobj.query.slice(4)
+    console.log users
     if !users[key]?
       connection.send "Invalid user"
       connection.close()
