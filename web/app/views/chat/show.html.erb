@@ -1,48 +1,112 @@
-<h2>Chat</h2>
+<div class="row">
+  <div class="large-12 columns">
 
-<p><%= @other_profile.name %></p>
+    <!-- Navigation -->
 
-<div class="chat-box" data-server="<%= @chat_url %>">
-  <style type="text/css" scoped="scoped"></style>
+      <nav class="top-bar">
+        <ul class="title-area">
+          <!-- Title Area -->
+          <li class="name">
+            <h1>
+              <a href="#">
+                ProMeet
+              </a>
+            </h1>
+          </li>
+          <li class="toggle-topbar menu-icon">
+            <a href="#"><span>menu</span></a>
+          </li>
+        </ul>
 
-  <section class="av-container">
-    <div class="video-section">
-      <video class="local" width="100%" height="100%"
-             autoplay="autoplay" placeholder="/images/webcam.svg">
-      </video>
-      <video class="remote" width="100%" height="100%"
-             autoplay="autoplay" placeholder="/images/webcam.svg">
-      </video>
+        <section class="top-bar-section">
+          <ul class="right">
+            <%= link_to 'Sign out', session_path, method: :delete %>
+           </ul>
+        </section>
+    </nav>
+
+    <!-- End Navigation -->
+
     </div>
-  </section>
+  </div>
 
-  <ul class="user-list">
+  <div class="row" id="chat-box">  
+    <section class="av-container">
+      <div class="large-8 columns" id="video-section">
+        <h5>On air</h5>
 
-  </ul>
-  <form class="composer">
-    <textarea class="message" autofocus="autofocus" disabled="disabled"
-         placeholder="Type your message here. Press Enter to send.">
-    </textarea>
-    <section class="action">
-      <button type="button" class="send-button" title="Send message">
-        <i class="icon-comment"></i>
-      </button>
-      <button type="button" class="av-button" title="Start video chat">
-        <i class="icon-facetime-video"></i>
-      </button>
+        <div class="row">
+          <video class="local" src="video/"
+                 poster="images/puppy.jpg"
+                 width="640" height="400">
+          </video>
+        </div>
+        <div class="row">
+          <div class="large-11 columns">
+            <div class="large-2 columns" align="left">
+              <%= @other_profile.name %>
+            </div>
+            <div class="large-6 columns" align="right">
+              Job, Company
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="large-4 columns">
+        <div class="row">
+          <form action="http://www.example.com/comments.php">
+            <h6>Chat history</h6>
+            <textarea name="comments" cols="20" rows="9" readonly></textarea>
+          </form>
+        </div>
+        <div class="row">
+          <form action="http://www.example.com/comments.php"> <h6>Input area</h6>
+            <textarea name="comments" cols="20" rows="4"></textarea>
+          </form>
+        </div>
+        <div class="row" align="right">
+          <a href="#" class="radius small button">Send</a>
+        </div>
+        <br>
+        <div class="row" align="right">
+          <a href="#" class="radius tiny secondary button">Report</a>
+          <a href="#" class="radius tiny secondary button">Leave</a>
+        </div>
+      </div>
     </section>
-  </form>
+  </div>
 
-  <ul class="history">
+  <br>
+  
+  <div class="row">
+    <div class="progress small-12 radius">
+      <span class="meter" style="width: 40%"></span>
+    </div>
+  </div>
 
-  </ul>
-</div>
+    <!-- Footer -->
 
-<script type="text/javascript">
-  window.chatController = new ChatController({
-    backend: <%= @chat_state.backend_url.inspect.html_safe %>,
-    key: <%= @chat_state.join_key_for(current_user).inspect.html_safe %>,
-    closeUrl: <%= session_url.inspect.html_safe %>
-  });
-</script>
+  <footer class="row">
+    <div class="large-12 columns">
+      <hr>
+      <div class="row">
+        <div class="large-6 columns">
+          <p>&copy; Copyright 2013. The Hack.</p>
+        </div>
+        <div class="large-6 columns">
+          <ul class="inline-list right">
+            <li><a href="aboutus.html">About Us</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </footer>
 
+  <script type="text/javascript">
+    window.chatController = new ChatController({
+      backend: <%= @chat_state.backend_url.inspect.html_safe %>,
+      key: <%= @chat_state.join_key_for(current_user).inspect.html_safe %>,
+      closeUrl: <%= session_url.inspect.html_safe %>
+    });
+  </script>
