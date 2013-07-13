@@ -18,7 +18,7 @@
 
         <section class="top-bar-section">
           <ul class="right">
-            <%= link_to 'Sign out', session_path, method: :delete, class: 'button' %>
+            <%= link_to 'Sign out', session_path, method: :delete %>
            </ul>
         </section>
     </nav>
@@ -42,7 +42,7 @@
     
     <div class="row">
       <div class="large-6 columns" align="right">
-         <%= image_tag 'head2.png'%>
+         <img src=<%= image_path 'head2.png'%> height="120px" width="100px">
       </div>
       <div class="large-6 columns" align="left">
 	<div class="row">
