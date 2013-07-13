@@ -2,6 +2,41 @@
 
 <p><%= @other_profile.name %></p>
 
+<div class="chat-box" data-server="<%= @chat_url %>">
+  <style type="text/css" scoped="scoped"></style>
+
+  <section class="av-container">
+    <div class="video-section">
+      <video class="local" width="100%" height="100%"
+             autoplay="autoplay" placeholder="/images/webcam.svg">
+      </video>
+      <video class="remote" width="100%" height="100%"
+             autoplay="autoplay" placeholder="/images/webcam.svg">
+      </video>
+    </div>
+  </section>
+
+  <ul class="user-list">
+
+  </ul>
+  <form class="composer">
+    <textarea class="message" autofocus="autofocus" disabled="disabled"
+         placeholder="Type your message here. Press Enter to send.">
+    </textarea>
+    <section class="action">
+      <button type="button" class="send-button" title="Send message">
+        <i class="icon-comment"></i>
+      </button>
+      <button type="button" class="av-button" title="Start video chat">
+        <i class="icon-facetime-video"></i>
+      </button>
+    </section>
+  </form>
+
+  <ul class="history">
+
+  </ul>
+</div>
 
 <script type="text/javascript">
   window.chatController = new ChatController({
