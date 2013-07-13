@@ -5,8 +5,10 @@ class CreateQueueStates < ActiveRecord::Migration
       t.string :join_key, limit: 64, null: false
       t.string :match_key, limit: 64, null: false
       t.string :backend_url, limit: 128, null: false
+      t.string :backend_http_url, limit: 128, null: false
     end
 
     add_index :queue_states, :user_id, unique: true
+    add_index :queue_states, :match_key, unique: true
   end
 end

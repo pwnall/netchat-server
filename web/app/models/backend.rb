@@ -6,13 +6,17 @@ class Backend < ActiveRecord::Base
   # The backend URL.
   validates :url, presence: true, length: 1..128
 
+  # The backend configuration URL.
+  validates :http_url, presence: true, length: 1..128
+
   # Choose a queue backend.
   def self.queue(hostname)
     backends = self.where(kind: 'queue')
     if backends.length == 0
-      "ws://#{hostname}:8443"
+      { url: "ws://#{hostname}:8443", http_url: "http://#{hostname}:8543" }
     else
-      backends.first.url
+      backend = backends.first
+      { url: backend.url, http_url: backend.http_url }
     end
   end
 
@@ -20,9 +24,10 @@ class Backend < ActiveRecord::Base
   def self.chat(hostname)
     backends = self.where(kind: 'chat')
     if backends.length == 0
-      "ws://#{hostname}:9443"
+      { url: "ws://#{hostname}:9443", http_url: "http://#{hostname}:9543" }
     else
-      backends.first.url
+      backend = backends.first
+      { url: backend.url, http_url: backend.http_url }
     end
   end
 end

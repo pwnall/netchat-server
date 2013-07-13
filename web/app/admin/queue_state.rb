@@ -2,6 +2,7 @@ ActiveAdmin.register QueueState do
   index do
     column :user
     column :backend_url
+    column :backend_http_url
     column :join_key
     column :match_key
     default_actions
@@ -13,6 +14,7 @@ ActiveAdmin.register QueueState do
     f.inputs "QueueState Details" do
       f.input :user_id
       f.input :backend_url, as: :url
+      f.input :backend_http_url, as: :url
       f.input :join_key
       f.input :match_key
     end

@@ -56,10 +56,8 @@ gem 'configvars_rails', '>= 0.5.3'
 # CSS.
 gem 'zurb-foundation'
 
-# Hangout IDs.
-gem 'mechanize'
-gem 'webkit_remote'
-gem 'webkit_remote_unstable'
+# WebSockets for talking to the backends.
+#gem 'web-socket-ruby', 
 
 group :development do
   gem 'better_errors'
