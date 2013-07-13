@@ -32,13 +32,11 @@ sendLeftQueue = (key) ->
 
 parsePacket = (packet) ->
   key = packet.key
-  ###
   matching.match packet, (err, result) ->
     urlobj = url.parse(packet.url)
     params = {MK1: packet.match_key, MK2: result.match_key}
     sendRequest urlobj params
-    delete users[key]
-  ###
+    notifyUser key, matched_key
   delete packet["key"]
   users[key] = packet
 
@@ -60,6 +58,8 @@ onRequest = (request, response) ->
 http.createServer(onRequest).listen HTTP_PORT
 
 ### WEBSOCKET Server###
+notifyUser = (key, matched_key) ->
+  if users[key]
 setConnectionTimeout = (connection) ->
   if connection._timeout?
     clearTimeout connection._timeout
