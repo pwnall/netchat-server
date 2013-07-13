@@ -1,0 +1,44 @@
+@import 'reset';
+@import 'border_radius';
+@import 'box_sizing';
+@import 'flexbox';
+@import 'fonts';
+
+@import 'compass_loader';
+
+@import 'font_awesome';
+
+@import 'pwnplus_fields';
+@import 'pwnplus_buttons';
+@import 'pwnstyles_forms';
+
+@import 'chat_box';
+@import 'chat_av';
+@import 'chat_status';
+@import 'login_box';
+
+html, body {
+  width: 100%;
+  height: 100%;
+  margin: 0 auto;
+}
+
+#browser-window {
+  @include border-box-sizing;
+  width: 100%;
+  height: 100%;
+  height: -webkit-calc(100% - 5px);
+  height: -moz-calc(100% - 5px);
+  height: calc(100% - 5px);
+  padding: 5px 0 0 0;
+}
+
+.chat-box {
+  width: 100%;
+  width: -webkit-calc(100% - 1em);
+  width: -moz-calc(100% - 1em);
+  width: calc(100% - 1em);
+  height: 100%;
+  margin: 0 auto;
+}
+

@@ -1,0 +1,170 @@
+.chat-box {
+  $active-header-color: hsl(0, 0%, 40%);
+  $border-color: hsl(0, 0%, 80%);
+  $composer-color: hsl(0, 0%, 50%);
+  $button-color: hsl(240deg, 0%, 50%);
+  $message-font-size: 16px;
+
+  @include vertical-flexbox;
+  height: 100%;
+
+  border: 1px solid $border-color;
+  @include border-radius-top(4px);
+
+  font-family: "Source Sans Pro", "AR PL UKai TW",
+      "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
+  font-weight: 400;
+  font-size: $message-font-size;
+
+  .title-bar {
+    padding: 0.2em 0.2em 0 0.4em;
+
+    font-family: "Dosis", "Helvetica Neue", Helvetica, Arial, "Lucida Grande",
+                 sans-serif;
+    font-size: 26px;
+    font-weight: 700;
+    line-height: 1.2;
+
+    display: table;
+    width: 100%;
+    @include border-box-sizing();
+
+    .title-area {
+      display: table-cell;
+      text-align: left;
+
+      > i {
+        color: hsl(0, 0%, 75%);
+      }
+    }
+    .status-bar {
+      display: table-cell;
+      text-align: right;
+    }
+  }
+
+  .user-list {
+    margin: 0;
+    padding: 0.2em 0.5em 0em 0.5em;
+
+    font-size: 16px;
+    font-weight: 300;
+    line-height: 1.6;
+
+    li {
+      border-top: 1px solid hsl(0, 0%, 95%);
+    }
+  }
+
+  .history, .composer {
+    padding-left: 2px;
+    padding-right: 2px;
+    padding-bottom: 2px;
+  }
+
+  .composer {
+    padding-top: 2px;
+
+    @include horizontal-flexbox;
+
+    .message {
+      -webkit-flex: 1;
+      -moz-flex: 1;
+      flex: 1;
+      min-width: 0;
+
+      border: 1px solid $composer-color;
+      margin: 0;
+
+      font-family: inherit;
+      font-size: inherit;
+      line-height: 1.2em;
+
+      @include border-box-sizing;
+      resize: vertical;
+      overflow: auto;
+      min-height: (4 * 1.2 * $message-font-size);
+      max-height: 80%;
+
+      @each $pseudo in "::-webkit-input-placeholder", ":-moz-placeholder",
+                       ":-ms-input-placeholder" {
+        &#{$pseudo} {
+          color: hsl(0, 0%, 50%);
+          font-weight: 300;
+          text-shadow: none;
+        }
+      }
+    }
+    .action {
+      padding: 0 0 0 2px;
+
+      @include vertical-flexbox;
+
+      > button {
+        @include pwnplus-subdued-button($button-color);
+
+        display: block;
+        margin: 2px 0 0 0;
+        width: 3em;
+
+        -webkit-flex: 1;
+        -moz-flex: 1;
+        flex: 1;
+        min-height: 0;
+
+        &:first-child {
+          margin-top: 0;
+        }
+        &.hidden {
+          display: none;
+        }
+      }
+    }
+  }
+
+  .history {
+    padding-top: 2px;
+    overflow: auto;
+    overflow-x: visible;
+    overflow-y: scroll;
+
+    -webkit-flex: 1;
+    -moz-flex: 1;
+    flex: 1;
+    min-height: 0;
+
+    li {
+      @include border-radius(2px);
+      border-width: 1px;
+      border-style: solid;
+      padding: 2px 1px;
+      margin: 2px 0;
+      > i::before {
+        width: 1.33em;
+        text-align: center;
+      }
+    }
+
+    .time {
+      display: inline-block;
+      padding: 0 2px 0 0;
+
+      font-weight: 300;
+      color: hsl(0%, 0%, 33%);
+    }
+    .author {
+      display: inline-block;
+      padding: 0 4px 0 0;
+
+      font-weight: 300;
+    }
+    .event {
+      color: hsl(0%, 0%, 25%);
+    }
+    li.delayed {
+      .time {
+        color: hsl(0%, 100%, 30%);
+      }
+    }
+  }
+}

@@ -1,0 +1,27 @@
+// Core flexbox declaration.
+@mixin flexbox {
+  display: -webkit-flex;
+  display: -moz-flex;
+  display: flex;
+
+  -webkit-align-items: stretch;
+  -moz-align-items: stretch;
+  align-items: stretch;
+}
+
+// Flexbox that lays its children horizontally.
+@mixin horizontal-flexbox {
+  @include flexbox;
+  -webkit-flex-direction: row;
+  -moz-flex-direction: row;
+  flex-direction: row;
+}
+
+// Flexbox that lays its children vertically.
+@mixin vertical-flexbox {
+  @include flexbox;
+  -webkit-flex-direction: column;
+  -moz-flex-direction: column;
+  flex-direction: column;
+}
+

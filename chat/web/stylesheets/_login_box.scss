@@ -1,0 +1,49 @@
+.login-box {
+  $border-color: hsl(240deg, 0%, 90%);
+  $button-color: hsl(240deg, 0%, 50%);
+
+  margin: 5px auto 0 auto;
+  padding: 0;
+  width: 400px;
+
+  font-family: "Source Sans Pro", "AR PL UKai TW",
+      "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
+  font-size: 24px;
+  font-weight: 300;
+
+  .title {
+    font-family: "Dosis", "Helvetica Neue", Helvetica, Arial, "Lucida Grande",
+                 sans-serif;
+    font-size: 48px;
+    font-weight: 700;
+    line-height: 1.2;
+    margin: 0;
+    padding: 0 0 0.5em 0;
+    text-align: center;
+  }
+
+  .field {
+    label {
+      width: 1em;
+      i::before {
+        width: 100%;
+        text-align: center;
+      }
+    }
+    input {
+      @include pwnplus-text-field($border-color);
+    }
+    select {
+      @include pwnplus-select-field($border-color);
+    }
+  }
+  button {
+    @include pwnplus-subdued-button($button-color);
+  }
+
+  .action {
+    display: block;
+    text-align: center;
+    padding: 0.4em 0.5em 0.4em 0.5em;
+  }
+}
