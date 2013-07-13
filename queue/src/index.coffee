@@ -106,7 +106,7 @@ notifyUser = (key) ->
   # if the user hasn't left
   if users[key]?
     response =
-      method: "matched"
+      method: "match"
     users[key].connection.send JSON.stringify response
 
 setConnectionTimeout = (connection) ->
