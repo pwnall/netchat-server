@@ -1,0 +1,10 @@
+{
+  "websocket": {
+    "host": "localhost",
+    "port": 9000
+  },
+  "http": {
+    "host": "localhost",
+    "port": 8000
+  }
+}
