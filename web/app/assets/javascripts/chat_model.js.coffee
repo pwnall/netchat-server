@@ -2,8 +2,8 @@
 class ChatModel
   constructor: ->
     @users = {}
-    @title = null
-    @roomVersion = null
+    @userCount = 0
+    @lastJoinedName = null
 
     @events = {}
     @firstEventId = null
@@ -14,7 +14,6 @@ class ChatModel
     @users = {}
     for userInfo in roomList.presence
       @users[userInfo.name] = userInfo
-    @roomVersion += 1
 
   addEvent: (event) ->
     @firstEventId = event.id if @firstEventId is null
@@ -29,35 +28,35 @@ class ChatModel
         unless event.session2
           @users[event.name] =
               name: event.name, name_color: event.name_color, av_nonce: null
-          @roomVersion += 1
+          @lsatJoinedName = event.name
       when 'part'
         unless event.session2
           delete @users[event.name]
-          @roomVersion += 1
       when 'av-invite'
         unless @users[event.name]
           @users[event.name] =
               name: event.name, name_color: event.name_color, av_nonce: null
         unless @users[event.name].av_nonce is event.av_nonce
           @users[event.name].av_nonce = event.av_nonce
-          @roomVersion += 1
       when 'av-accept'
         unless @users[event.name]
           @users[event.name] =
               name: event.name, name_color: event.name_color, av_nonce: null
-          @roomVersion += 1
         for own name, userInfo of @users
           if userInfo.av_nonce is event.av_nonce
             userInfo.av_nonce = null
-            @roomVersion += 1
       when 'av-close'
         unless @users[event.name]
           @users[event.name] =
               name: event.name, name_color: event.name_color, av_nonce: null
-          @roomVersion += 1
         if @users[event.name].av_nonce is event.av_nonce
           @users[event.name].av_nonce = null
-          @roomVersion += 1
+
+    @userCount = 0
+    for own name, user of @users
+      @userCount += 1
+
+    @
 
   getEvent: (eventId) -> @events[eventId]
 

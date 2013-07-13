@@ -14,8 +14,6 @@ class AvView
       @$remoteVideo = @$localVideo
 
     @$partnerName = $('.partner-name', box)
-    @$avButton = $('.av-button', box)
-    @$avButton.click (event) => @onAvClick event
 
   onAvClick: (event) ->
     null  # RtcController overrides this hook
@@ -37,11 +35,13 @@ class AvView
     @$box.addClass 'av-hidden'
 
   showLocalVideo: (stream) ->
+    console.log 'Showing local video'
     @$avContainer.addClass 'no-remote'
     @localVideo.src = window.URL.createObjectURL stream
     @$avContainer.removeClass 'hidden'
 
   showRemoteVideo: (stream) ->
+    console.log 'Showing remote video'
     @$avContainer.addClass 'remote'
     @$avContainer.removeClass 'no-remote'
     @remoteVideo.src = window.URL.createObjectURL stream
