@@ -1,13 +1,104 @@
-<h2>Chat</h2>
+<div class="row">
+  <div class="large-12 columns">
 
-<p><%= @other_profile.name %></p>
+    <!-- Navigation -->
 
+      <nav class="top-bar">
+        <ul class="title-area">
+          <!-- Title Area -->
+          <li class="name">
+            <h1>
+              <a href="#">
+                ProMeet
+              </a>
+            </h1>
+          </li>
+          <li class="toggle-topbar menu-icon"><a href="#"><span>menu</span></a></li>
+        </ul>
 
-<script type="text/javascript">
-  window.chatController = new ChatController({
-    backend: <%= @chat_state.backend_url.inspect.html_safe %>,
-    key: <%= @chat_state.join_key_for(current_user).inspect.html_safe %>,
-    closeUrl: <%= session_url.inspect.html_safe %>
-  });
-</script>
+        <section class="top-bar-section">
+          <ul class="right">
+            <%= link_to 'Sign out', session_path, method: :delete %>
+           </ul>
+        </section>
+    </nav>
 
+    <!-- End Navigation -->
+
+    </div>
+  </div>
+
+  <div class="row">  
+    <div class="large-8 columns">
+<h5>On air</h5>
+      <div class="row">
+	<video src="video/puppy.mp4"
+	       poster="images/puppy.jpg"
+	       width="640" height="400"
+	       preload
+	       controls
+	       loop>
+	</video>
+      </div>
+      <div class="row">
+	<div class="large-11 columns">
+	  <div class="large-2 columns" align="left">
+	    <%= @other_profile.name %>
+	  </div>
+	  <div class="large-6 columns" align="right">
+	    Job, Company
+	  </div>
+	</div>
+      </div>
+    </div>
+    <div class="large-4 columns">
+      <div class="row">
+	<form action="http://www.example.com/comments.php"> <h6>Chat history</h6>
+	  <textarea name="comments" cols="20" rows="9" readonly></textarea> </form>
+      </div>
+      <div class="row">
+	<form action="http://www.example.com/comments.php"> <h6>Input area</h6>
+	  <textarea name="comments" cols="20" rows="4"></textarea> </form>
+      </div>
+      <div class="row" align="right">
+	<a href="#" class="radius small button">Send</a>
+      </div>
+      <br>
+      <div class="row" align="right">
+	<a href="#" class="radius tiny secondary button">Report</a>
+	<a href="#" class="radius tiny secondary button">Force quit</a>
+      </div>
+    </div>
+  </div>
+  <br>
+  
+  <div class="row">
+    <div class="progress small-12 radius">
+      <span class="meter" style="width: 40%"></span>
+    </div>
+  </div>
+
+    <!-- Footer -->
+
+  <footer class="row">
+    <div class="large-12 columns">
+      <hr>
+      <div class="row">
+        <div class="large-6 columns">
+          <p>&copy; Copyright 2013. The Hack.</p>
+        </div>
+        <div class="large-6 columns">
+          <ul class="inline-list right">
+            <li><a href="aboutus.html">About Us</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </footer>
+  <script type="text/javascript">
+    window.chatController = new ChatController({
+      backend: <%= @chat_state.backend_url.inspect.html_safe %>,
+      key: <%= @chat_state.join_key_for(current_user).inspect.html_safe %>,
+      closeUrl: <%= session_url.inspect.html_safe %>
+    });
+  </script>
