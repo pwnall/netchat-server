@@ -59,6 +59,7 @@ ActiveRecord::Schema.define(version: 20130713150955) do
   create_table "match_entries", force: true do |t|
     t.integer  "user_id",       null: false
     t.integer  "other_user_id", null: false
+    t.integer  "match_id",      null: false
     t.datetime "created_at",    null: false
     t.datetime "closed_at"
     t.boolean  "rejected"
@@ -67,7 +68,7 @@ ActiveRecord::Schema.define(version: 20130713150955) do
   add_index "match_entries", ["user_id", "created_at"], name: "index_match_entries_on_user_id_and_created_at", unique: true, using: :btree
 
   create_table "matches", force: true do |t|
-    t.boolean  "rejected"
+    t.boolean  "rejected",   null: false
     t.datetime "created_at", null: false
   end
 

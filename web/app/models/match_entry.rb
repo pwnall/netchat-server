@@ -16,6 +16,11 @@ class MatchEntry < ActiveRecord::Base
   belongs_to :match
   validates :match, presence: true
 
+  # The deadline by which the match must be accepted by both sides.
+  def expires_at
+    created_at + 30
+  end
+
   # The last (most recent) queue history entry.
   def self.last_for(user)
     MatchEntry.where(user_id: user.id).order(:created_at).reverse_order.first
@@ -23,7 +28,9 @@ class MatchEntry < ActiveRecord::Base
 
   # Creates matching entries for a pair of users who got matched.
   def self.create_pair(user1, user2)
-    match = Match.new created_at: Time.now
+    match = Match.new
+    match.created_at = Time.now
+    match.rejected = false
     match.save!
 
     entry1 = MatchEntry.new user: user1, other_user: user2

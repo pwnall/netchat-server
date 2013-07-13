@@ -9,5 +9,8 @@
 </p>
 
 <script type="text/javascript">
-  window.matchController = new MatchController();
+  window.matchController = new MatchController({
+    createdAt: <%= @match_entry.created_at %>,
+    expiresAt: <%= @match_entry.expires_at %>
+  });
 </script>
