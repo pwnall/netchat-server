@@ -14,7 +14,7 @@ appRoot = path.dirname __dirname
 
 # Settings.
 application.enable 'trust proxy'
-application.set 'port', process.env.PORT || 11000
+application.set 'port', process.env.PORT || 8443
 application.set 'views', path.join(appRoot, 'views')
 application.set 'view engine', 'ejs'
 application.set 'view options', layout: false
