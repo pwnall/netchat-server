@@ -7,20 +7,20 @@ class Backend < ActiveRecord::Base
   validates :url, presence: true, length: 1..128
 
   # Choose a queue backend.
-  def self.queue(host)
+  def self.queue(hostname)
     backends = self.where(kind: 'queue')
     if backends.length == 0
-      "ws://#{host}:8443"
+      "ws://#{hostname}:8443"
     else
       backends.first.url
     end
   end
 
   # Choose a chat backend.
-  def self.chat(host)
+  def self.chat(hostname)
     backends = self.where(kind: 'chat')
     if backends.length == 0
-      "ws://#{host}:9443"
+      "ws://#{hostname}:9443"
     else
       backends.first.url
     end

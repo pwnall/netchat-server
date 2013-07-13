@@ -5,6 +5,10 @@ Hangouts::Application.routes.draw do
   put 'profile/add_linkedin' => 'profile#add_linkedin',
       as: :profile_add_linkedin
 
+  get 'queue' => 'queue#show', as: :queue
+  put 'queue/enter' => 'queue#enter', as: :queue_enter
+  put 'queue/leave' => 'queue#leave', as: :queue_leave
+
   root :to => 'session#show'
 
   resources :users

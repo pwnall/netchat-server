@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20130713042831) do
+ActiveRecord::Schema.define(version: 20130713052042) do
 
   create_table "backends", force: true do |t|
     t.string   "kind",       limit: 16,  null: false
@@ -47,15 +47,21 @@ ActiveRecord::Schema.define(version: 20130713042831) do
   add_index "profiles", ["user_id"], name: "index_profiles_on_user_id", unique: true, using: :btree
 
   create_table "queue_entries", force: true do |t|
-    t.integer  "user_id"
-    t.datetime "queued_at",     null: false
-    t.datetime "left_queue_at"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.integer  "user_id",    null: false
+    t.datetime "entered_at", null: false
+    t.datetime "left_at"
   end
 
-  add_index "queue_entries", ["user_id", "queued_at"], name: "index_queue_entries_on_user_id_and_queued_at", unique: true, using: :btree
-  add_index "queue_entries", ["user_id"], name: "index_queue_entries_on_user_id", using: :btree
+  add_index "queue_entries", ["user_id", "entered_at"], name: "index_queue_entries_on_user_id_and_entered_at", unique: true, using: :btree
+
+  create_table "queue_states", force: true do |t|
+    t.integer "user_id",                 null: false
+    t.string  "join_key",    limit: 64,  null: false
+    t.string  "match_key",   limit: 64,  null: false
+    t.string  "backend_url", limit: 128, null: false
+  end
+
+  add_index "queue_states", ["user_id"], name: "index_queue_states_on_user_id", unique: true, using: :btree
 
   create_table "users", force: true do |t|
     t.string   "exuid",      limit: 32,                 null: false

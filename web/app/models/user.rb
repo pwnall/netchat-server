@@ -24,11 +24,23 @@ class User < ActiveRecord::Base
   has_one :profile, dependent: :nullify
 
   has_many :queue_entries
+end
 
 
+# Queueing
+class User
   # True if the user is queued up, false otherwise.
-  def queued
+  def queued?
     last_queue_entry = queue_entries.last
-    last_queue_entry && !last_queue_entry.left_queue_at
+    last_queue_entry && !last_queue_entry.left_at
+  end
+
+  # Create a queue entry for the user.
+  def queue!(hostname)
+    QueueEntry.transaction do
+      queue_entry = QueueEntry.new_for self
+      queue_entry.save!
+      QueueState.create_for self, hostname
+    end
   end
 end
