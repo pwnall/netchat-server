@@ -12,6 +12,7 @@ gotWebSocketConnection =  (connection) ->
     connection.removeAllListeners()
 
 # set up websocket server
-websocketTransport = new WebSocketTransport({host: "localhost", port: 9000})
-console.log "WebSocket server started"
+port = process.env['PORT'] or 8443
+websocketTransport = new WebSocketTransport({host: "localhost", port: port})
+console.log "NetChat Queue Server listening on port #{port}"
 websocketTransport.on 'connection', gotWebSocketConnection
