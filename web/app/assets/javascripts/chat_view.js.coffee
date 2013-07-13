@@ -14,8 +14,6 @@ class AvView
       @$remoteVideo = @$localVideo
 
     @$partnerName = $('.partner-name', box)
-    @$avButton = $('.av-button', box)
-    @$avButton.click (event) => @onAvClick event
 
   onAvClick: (event) ->
     null  # RtcController overrides this hook

@@ -29,9 +29,6 @@ class RtcController
 
   # Called when the user clicks on the A/V button.
   onAvClick: (event) ->
-    event.preventDefault()
-    event.stopPropagation()
-
     if @calling or @answering
       @rtcReset()
       @avReset()
@@ -241,6 +238,7 @@ class RtcController
 
   # Called when a step in the RTC process fails.
   onRtcError: (errorText) ->
+    console.log errorText
     console.log "A/V error: " + errorText
     @avView.hideVideo()
     @rtcReset()
@@ -249,7 +247,8 @@ class RtcController
   #
   # The most likely failure is the user didn't grant us permissions.
   onAvInputError: (errorText) ->
-    console.log "A/V errorL " + errorText
+    console.log errorText
+    console.log "A/V error: " + errorText
     @avView.hideVideo()
     @rtcReset()
 

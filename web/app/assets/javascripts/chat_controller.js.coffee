@@ -115,10 +115,27 @@ class ChatController
 
   onMessage: (data) ->
     if data.events
+      oldCount = @model.userCount
+
       for event in data.events
         @model.addEvent event
         @rtcController.onAvEvent(event) if event.av_nonce
+        if event.type is 'av-invite' and !@rtcController.calling and
+            !@rtcController.answering
+          @chatView.avView.onAvAccept event.av_nonce, event.name
       @chatView.update @model
+
+      if @model.userCount isnt oldCount
+        if @model.userCount is 1
+          # Wait for the 2nd user to join.
+        else if @model.userCount
+          if oldCount is 1 and !@rtcController.calling and
+              !@rtcController.answering
+            console.log 'Triggering onAvClick'
+            @chatView.avView.onAvClick()
+        else
+          console.log "Weird userCount #{@model.userCount} in room" 
+
     if data.list
       @model.addList data.list
       @chatView.update @model
