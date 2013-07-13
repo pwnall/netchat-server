@@ -67,7 +67,7 @@ class QueueState < ActiveRecord::Base
     response = response_klass.new(uri.host, uri.port).start do |http|
       http.request request
     end
-    return if response.code >= 200 && response.code < 300
+    return if response.instance_of? Net::HTTPSuccess
 
     # TODO(pwnall): handle non-200 response
   end
