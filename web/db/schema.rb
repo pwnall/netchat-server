@@ -23,17 +23,18 @@ ActiveRecord::Schema.define(version: 20130713150955) do
 
   create_table "chat_states", force: true do |t|
     t.integer  "match_id"
-    t.string   "backend_url"
-    t.string   "backend_http_url"
     t.integer  "user1_id"
     t.integer  "user2_id"
-    t.string   "join_key1"
-    t.string   "join_key2"
+    t.string   "backend_url",      null: false
+    t.string   "backend_http_url", null: false
+    t.string   "room_key",         null: false
+    t.string   "join_key1",        null: false
+    t.string   "join_key2",        null: false
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
-  add_index "chat_states", ["match_id"], name: "index_chat_states_on_match_id", using: :btree
+  add_index "chat_states", ["match_id"], name: "index_chat_states_on_match_id", unique: true, using: :btree
   add_index "chat_states", ["user1_id"], name: "index_chat_states_on_user1_id", using: :btree
   add_index "chat_states", ["user2_id"], name: "index_chat_states_on_user2_id", using: :btree
 

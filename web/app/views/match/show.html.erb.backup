@@ -1,0 +1,16 @@
+<h2>Match found</h2>
+
+<p>We found a match for you.</p>
+<p><%= @other_profile.name %></p>
+
+<p>
+  <%= link_to 'Accept', match_accept_path, class: 'button', method: :put %>
+  <%= link_to 'Reject', match_reject_path, class: 'button', method: :put %>
+</p>
+
+<script type="text/javascript">
+  window.matchController = new MatchController({
+    createdAt: <%= @match_entry.created_at %>,
+    expiresAt: <%= @match_entry.expires_at %>
+  });
+</script>
