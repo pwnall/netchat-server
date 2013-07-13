@@ -1,18 +1,24 @@
-WebSocketTransport = require('./transport/WebSocketTransport')
-#config = require('./config')
+server = require('ws').Server
 
-gotWebSocketMessage = (message, connection) ->
-  console.log message
+gotMessage = (connection, message) ->
+  if typeof(message) == 'string'
+    try
+      packet = JSON.parse(message)
+    catch err
+      connection.close()
+      console.log "invalid json package: #{message}"
+      return
 
-  
+  if packet.method == "ping"
+    packet.method = "pong"
+    console.log packet
+    connection.send JSON.stringify packet
 
-gotWebSocketConnection =  (connection) ->
-  connection.on 'message', gotWebSocketMessage
-  connection.on 'disconnect', () ->
-    connection.removeAllListeners()
+gotConnection = (connection) ->
+  connection.on 'message', (message) ->
+    gotMessage connection, message
+    
 
-# set up websocket server
-port = process.env['PORT'] or 8443
-websocketTransport = new WebSocketTransport({host: "localhost", port: port})
-console.log "NetChat Queue Server listening on port #{port}"
-websocketTransport.on 'connection', gotWebSocketConnection
+wss = new server({port: 9000})
+wss.on 'connection', (connection) ->
+  gotConnection connection
