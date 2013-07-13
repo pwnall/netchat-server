@@ -16,10 +16,13 @@
         </ul>
 
         <section class="top-bar-section">
-          <ul class="right">
-            <li><%= link_to 'Register', new_user_path, class: 'button' %></li>
-            <li><%= link_to 'Login', new_session_path, class: 'button' %></li>
-            <li><a href="./faq.html">FAQ</a></li>
+          <ul style="width: 150px" class="right">
+            <span style="padding: 0px">
+            <li><%= link_to 'Register', new_user_path %></li>
+          </span>
+          <span style="width: 60px">
+            <li><%= link_to 'Login', new_session_path %></li>
+          </span>
           </ul>
 
         </section>
@@ -88,11 +91,11 @@
 
           <h4>Start the Journey</h4><hr/>
 
-          <a class="radius button" href="actions/apply.html">
+          <a class="radius button" href="actions/apply.html" style="margin: 0 0 1em 0 !important; width: 240px">
             Sign In with LinkedIn
           </a>
 
-          <a class="radius button" href="#">
+          <a class="radius button" href="#" style="width: 240px">
             Sign In with Facebook
           </a>
 
