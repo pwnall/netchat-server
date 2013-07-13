@@ -21,7 +21,12 @@ EventMachine.run do
   db = nil  # TODO(pwnall): hookup whatever db we're using
   nexus = QueueSrv::Nexus.new db, log
   ws_server = QueueSrv::WebSocketServer.new nexus
+  http_server = QueueSrv::HttpServer.new nexus
+  matcher = QueueSrv::Matcher.new nexus
+
 
   # Event loop.
   ws_server.run
+  http_server.run
+  matcher.run
 end

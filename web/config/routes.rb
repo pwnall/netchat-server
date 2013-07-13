@@ -10,6 +10,10 @@ Hangouts::Application.routes.draw do
   put 'queue/leave' => 'queue#leave', as: :queue_leave
   post 'queue/matched' => 'queue#matched', as: :queue_matched
 
+  get 'match' => 'match#show', as: :match
+  put 'match/accept', as: :match_accept
+  put 'match/reject', as: :match_reject
+
   root :to => 'session#show'
 
   resources :users

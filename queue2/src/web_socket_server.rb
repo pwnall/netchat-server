@@ -17,6 +17,9 @@ class WebSocketServer
   def port
     @port ||= (ENV['PORT'] ? ENV['PORT'].to_i : 8443)
   end
+  def http_port
+    @http_port ||= port + 100
+  end
 
   def run
     @log.info "Server PID #{$PID}, listening on #{host} port #{port}"

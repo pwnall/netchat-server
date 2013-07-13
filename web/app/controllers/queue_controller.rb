@@ -1,5 +1,6 @@
 class QueueController < ApplicationController
-  before_filter :ensure_user_has_profile
+  before_filter :ensure_user_has_profile, except: [:matched]
+  skip_before_filter :verify_authenticity_token, only: [:matched]
 
   # GET /queue
   def show
@@ -43,9 +44,9 @@ class QueueController < ApplicationController
   #
   # Called by the queue backend.
   def matched
-    if param[:left_mk]
+    if params[:left_mk]
       # A user left the queue.
-      queue_state = QueueState.for_match_key param[:left_mk]
+      queue_state = QueueState.for_match_key params[:left_mk]
       if queue_state
         # NOTE: the queue backend is telling us the user left, so we don't need
         #       to repeat the information back.
@@ -53,11 +54,12 @@ class QueueController < ApplicationController
       else
         # We already know that the user left the queue.
       end
-    elsif param[:mk1] and param[:mk2]
+    elsif params[:mk1] and params[:mk2]
       # Two users have been matched.
-      queue_state1 = QueueState.for_match_key param[:mk1]
-      queue_state2 = QueueState.for_match_key param[:mk2]
+      queue_state1 = QueueState.for_match_key params[:mk1]
+      queue_state2 = QueueState.for_match_key params[:mk2]
       if queue_state1 && queue_state2
+        MatchEntry.create_pair queue_state1.user, queue_state2.user
       else
         # At least one of the users just left the matching process.
 

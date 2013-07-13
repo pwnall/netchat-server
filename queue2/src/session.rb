@@ -19,9 +19,18 @@ class Session
     join_key = query['key']
     if join_key
       @nexus.user_by_key join_key do |user|
-        @user = user
-        @user.add_session self
-        respond method: 'hi'
+        if user
+          @user = user
+          # Close old sessions. These are other tabs, and we shouldn't have
+          # multiple tabs go into the chat window.
+          @user.sessions.each do |old_session|
+            old_session.respond method: 'old'
+          end
+          @user.add_session self
+          respond method: 'hi'
+        else
+          @ws.close_websocket
+        end
       end
     else
       @ws.close_websocket
@@ -47,6 +56,11 @@ class Session
       data[:method] = 'pong'
       respond data
     end
+  end
+
+  # Tell the client we found a match
+  def send_matched
+    respond method: 'matched'
   end
 
   # Returns data to the client.

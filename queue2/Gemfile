@@ -10,3 +10,5 @@ gem 'em-mongo', '>= 0.4.3'
 gem 'bson_ext', '>= 1.9.1'  # For mongo.
 gem 'em-websocket', '>= 0.5.0'
 gem 'eventmachine', '>= 1.0.1'
+gem 'eventmachine_httpserver', '>= 0.2.1'
+gem 'em-http-request', '~> 1.0.3'

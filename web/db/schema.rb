@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20130713052042) do
+ActiveRecord::Schema.define(version: 20130713114049) do
 
   create_table "backends", force: true do |t|
     t.string   "kind",       limit: 16,  null: false
@@ -39,6 +39,16 @@ ActiveRecord::Schema.define(version: 20130713052042) do
   add_index "credentials", ["type", "name"], name: "index_credentials_on_type_and_name", unique: true, using: :btree
   add_index "credentials", ["type", "updated_at"], name: "index_credentials_on_type_and_updated_at", using: :btree
   add_index "credentials", ["user_id", "type"], name: "index_credentials_on_user_id_and_type", using: :btree
+
+  create_table "match_entries", force: true do |t|
+    t.integer  "user_id",       null: false
+    t.integer  "other_user_id", null: false
+    t.datetime "created_at",    null: false
+    t.datetime "closed_at"
+    t.boolean  "rejected"
+  end
+
+  add_index "match_entries", ["user_id", "created_at"], name: "index_match_entries_on_user_id_and_created_at", unique: true, using: :btree
 
   create_table "profiles", force: true do |t|
     t.integer "user_id"

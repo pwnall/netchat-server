@@ -13,6 +13,6 @@ class QueueEntry < ActiveRecord::Base
 
   # The last (most recent) queue history entry.
   def self.last_for(user)
-    QueueEntry.where(user_id: user.id).last
+    QueueEntry.where(user_id: user.id).order(:entered_at).reverse_order.first
   end
 end

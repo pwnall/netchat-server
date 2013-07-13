@@ -26,16 +26,52 @@ class Nexus
   def user_by_key(join_key, &block)
     if @users[join_key]
       block.call @users[join_key]
-      return nil
+    else
+      block.call nil
     end
 
-    new_user = User.new join_key  # TODO: database create-or-fetch
+    nil
+  end
+
+  # Called when the Web server sends us a user profile.
+  def user_profile(json_info, &block)
+    join_key = json_info['key']
+    match_key = json_info['match_key']
+    profile_info = json_info['profile']
+    match_url = json_info['url']
+
+    # TODO: database create
+    new_user = User.new(key: join_key, match_key: match_key,
+                        profile_info: profile_info, match_url: match_url)
 
     # TODO: this goes in the db's response block
     @users[join_key] ||= new_user
-    block.call @users[join_key]
+    block.call
+  end
 
-    nil
+  # Called when the Web server tells us a user left the queue.
+  def user_left(json_info, &block)
+    join_key = json_info['key']
+
+    # TODO: database fetch
+    user = @users[join_key]
+
+    if user
+      # TODO: terminate user's sessions
+      user.sessions
+    end
+
+    block.call
+  end
+
+  # Yields the users eligible to be matched.
+  # 
+  # Returns nil.
+  #
+  # The yield might happen after the call completes.
+  def matchable_users(&block)
+    users = @users.values.select { |u| u.sessions.length > 0 && !u.matched }
+    block.call users
   end
 
   # The Logger instance used by this server.

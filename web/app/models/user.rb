@@ -22,16 +22,14 @@ class User < ActiveRecord::Base
 
   # The user's profile information.
   has_one :profile, dependent: :nullify
-
-  has_many :queue_entries
 end
 
 
-# Queueing
+# Queueing.
 class User
   # True if the user is queued up, false otherwise.
   def queued?
-    last_queue_entry = queue_entries.last
+    last_queue_entry = QueueEntry.last_for self
     last_queue_entry && !last_queue_entry.left_at
   end
 
@@ -56,4 +54,15 @@ class User
     queue_state.remove_from_backend if remove_from_backend
     queue_state.destroy if queue_state
   end
+end
+
+# Match accepting.
+class User
+  # True if this user has a match they need to accept.
+  def matched?
+    last_match_entry = MatchEntry.last_for self
+    last_match_entry && !last_match_entry.closed_at
+  end
+
+
 end
