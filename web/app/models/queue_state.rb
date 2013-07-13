@@ -29,6 +29,11 @@ class QueueState < ActiveRecord::Base
     where(user_id: user.id).first
   end
 
+  # The QueryState with a match key. May be null.
+  def self.for_match_key(match_key)
+    where(match_key: match_key).first
+  end
+
   # Saved QueueState assigning a user to a queue backend.
   def self.create_for(user, hostname)
     if old_state = self.for_user(user)
@@ -45,20 +50,39 @@ class QueueState < ActiveRecord::Base
     state.save!
     state
   end
+end
 
-  # Sends the queuing information to the queue backend.
+# Communication with the queueing backend.
+class QueueState
+  # Tells the queue backend that the user joined the queue.
   def push_to_backend(queue_matched_url)
-    uri = URI.parse "#{backend_http_url}/user"
-    info = {
+    json_body = {
       key: join_key,
       match_key: match_key,
       url: queue_matched_url,
       profile: user.profile.to_queue_json
     }
+    response = send_json "#{backend_http_url}/user", json_body
+    return if response.instance_of? Net::HTTPSuccess
 
+    # TODO(pwnall): handle non-200 response
+  end
+
+  # Tells the queue backend that the user left the queue.
+  def remove_from_backend
+    json_body = { key: join_key, match_key: match_key }
+    send_json "#{backend_http_url}/user_left", json_body
+
+    # NOTE: no error handling here; if the backend is down, it already removed
+    #       the user from the queue
+  end
+
+  # Helper for sending JSON payloads to the queue backend.
+  def send_json(url, json_body)
+    uri = URI.parse url
     request = Net::HTTP::Post.new uri.path,
                                   'Content-Type' => 'application/json'
-    request.body = info.to_json
+    request.body = json_body.to_json
     response_klass = if uri.scheme == 'https'
       Net::HTTPS
     else
@@ -67,8 +91,7 @@ class QueueState < ActiveRecord::Base
     response = response_klass.new(uri.host, uri.port).start do |http|
       http.request request
     end
-    return if response.instance_of? Net::HTTPSuccess
-
-    # TODO(pwnall): handle non-200 response
+    response
   end
+  private :send_json
 end

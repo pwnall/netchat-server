@@ -43,4 +43,17 @@ class User
       QueueState.create_for self, hostname
     end
   end
+
+  # Reports the fact that a user has left the queue.
+  def leave_queue!(remove_from_backend)
+    queue_entry = QueueEntry.last_for self
+    return unless queue_entry
+
+    queue_entry.left_at = Time.now
+    queue_entry.save!
+
+    queue_state = QueueState.for_user self
+    queue_state.remove_from_backend if remove_from_backend
+    queue_state.destroy if queue_state
+  end
 end

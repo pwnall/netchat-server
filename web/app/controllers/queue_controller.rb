@@ -35,13 +35,36 @@ class QueueController < ApplicationController
       return
     end
 
-    # TODO(pwnall): code for leaving the queue
+    current_user.leave_queue! true
+    redirect_to profile_path
   end
 
   # POST /queue/matched
   #
   # Called by the queue backend.
   def matched
-    # TODO(pwnall): update the database
+    if param[:left_mk]
+      # A user left the queue.
+      queue_state = QueueState.for_match_key param[:left_mk]
+      if queue_state
+        # NOTE: the queue backend is telling us the user left, so we don't need
+        #       to repeat the information back.
+        queue_state.user.leave_queue! false
+      else
+        # We already know that the user left the queue.
+      end
+    elsif param[:mk1] and param[:mk2]
+      # Two users have been matched.
+      queue_state1 = QueueState.for_match_key param[:mk1]
+      queue_state2 = QueueState.for_match_key param[:mk2]
+      if queue_state1 && queue_state2
+      else
+        # At least one of the users just left the matching process.
+
+        # TODO(pwnall): do something smart here
+      end
+    else
+      # Bad request.
+    end
   end
 end
