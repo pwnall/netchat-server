@@ -18,7 +18,7 @@
 
         <section class="top-bar-section">
           <ul class="right">
-            <%= link_to 'Sign out', session_path, method: :delete %>
+            <%= link_to 'Sign out', session_path, method: :delete, class: 'button' %>
            </ul>
 
         </section>
@@ -41,7 +41,7 @@
 	    </div>
 	    <div class="large-4 columns" align="left">
 	      <div class="row">
-		Name
+		<%= @profile.name %>
 	      </div>
 	      <br>
 	      <div class="row">
