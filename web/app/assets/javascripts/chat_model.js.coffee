@@ -3,6 +3,7 @@ class ChatModel
   constructor: ->
     @users = {}
     @userCount = 0
+    @lastJoinedName = null
 
     @events = {}
     @firstEventId = null
@@ -27,6 +28,7 @@ class ChatModel
         unless event.session2
           @users[event.name] =
               name: event.name, name_color: event.name_color, av_nonce: null
+          @lsatJoinedName = event.name
       when 'part'
         unless event.session2
           delete @users[event.name]

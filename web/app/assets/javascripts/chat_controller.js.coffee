@@ -117,20 +117,24 @@ class ChatController
     if data.events
       oldCount = @model.userCount
 
+      lastInvite = null
+
       for event in data.events
         @model.addEvent event
         @rtcController.onAvEvent(event) if event.av_nonce
-        if event.type is 'av-invite' and !@rtcController.calling and
-            !@rtcController.answering
-          @chatView.avView.onAvAccept event.av_nonce, event.name
+        if event.type is 'av-invite'
+          lastInvite = event
       @chatView.update @model
+
+      if lastInvite and !@rtcController.calling and !@rtcController.answering
+        @chatView.avView.onAvAccept lastInvite.av_nonce, lastInvite.name
 
       if @model.userCount isnt oldCount
         if @model.userCount is 1
           # Wait for the 2nd user to join.
         else if @model.userCount
-          if oldCount is 1 and !@rtcController.calling and
-              !@rtcController.answering
+          if @model.lastJoinedName is @name and
+              !@rtcController.calling and !@rtcController.answering
             console.log 'Triggering onAvClick'
             @chatView.avView.onAvClick()
         else
