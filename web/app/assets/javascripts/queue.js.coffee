@@ -72,7 +72,7 @@ class QueueController
   # Sets up the WebSocket talking to the queue server.
   setupSocket: ->
     # NOTE: the joinKey could be embedded here
-    @wsUri = @backendUrl + "/chat?key=" + encodeURIComponent(@joinKey)
+    @wsUri = @backendUrl + "/queue?key=" + encodeURIComponent(@joinKey)
     @pingController = new PingController @
     @connect()
 

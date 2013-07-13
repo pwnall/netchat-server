@@ -3,6 +3,7 @@ class CreateMatchEntries < ActiveRecord::Migration
     create_table :match_entries do |t|
       t.references :user, null: false
       t.references :other_user, null: false
+      t.references :match, null: false
       t.datetime :created_at, null: false
       t.datetime :closed_at, null: true
       t.boolean :rejected, null: true

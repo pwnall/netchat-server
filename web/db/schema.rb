@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20130713114049) do
+ActiveRecord::Schema.define(version: 20130713150955) do
 
   create_table "backends", force: true do |t|
     t.string   "kind",       limit: 16,  null: false
@@ -20,6 +20,22 @@ ActiveRecord::Schema.define(version: 20130713114049) do
     t.datetime "created_at"
     t.datetime "updated_at"
   end
+
+  create_table "chat_states", force: true do |t|
+    t.integer  "match_id"
+    t.string   "backend_url"
+    t.string   "backend_http_url"
+    t.integer  "user1_id"
+    t.integer  "user2_id"
+    t.string   "join_key1"
+    t.string   "join_key2"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "chat_states", ["match_id"], name: "index_chat_states_on_match_id", using: :btree
+  add_index "chat_states", ["user1_id"], name: "index_chat_states_on_user1_id", using: :btree
+  add_index "chat_states", ["user2_id"], name: "index_chat_states_on_user2_id", using: :btree
 
   create_table "config_vars", force: true do |t|
     t.string "name",  null: false
@@ -49,6 +65,11 @@ ActiveRecord::Schema.define(version: 20130713114049) do
   end
 
   add_index "match_entries", ["user_id", "created_at"], name: "index_match_entries_on_user_id_and_created_at", unique: true, using: :btree
+
+  create_table "matches", force: true do |t|
+    t.boolean  "rejected"
+    t.datetime "created_at", null: false
+  end
 
   create_table "profiles", force: true do |t|
     t.integer "user_id"
