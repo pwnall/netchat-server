@@ -11,7 +11,14 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20130713010647) do
+ActiveRecord::Schema.define(version: 20130713042831) do
+
+  create_table "backends", force: true do |t|
+    t.string   "kind",       limit: 16,  null: false
+    t.string   "url",        limit: 128, null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "config_vars", force: true do |t|
     t.string "name",  null: false
@@ -37,7 +44,7 @@ ActiveRecord::Schema.define(version: 20130713010647) do
     t.string  "name",    null: false
   end
 
-  add_index "profiles", ["user_id"], name: "index_profiles_on_user_id", using: :btree
+  add_index "profiles", ["user_id"], name: "index_profiles_on_user_id", unique: true, using: :btree
 
   create_table "queue_entries", force: true do |t|
     t.integer  "user_id"

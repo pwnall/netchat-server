@@ -1,5 +1,5 @@
 class ProfileController < ApplicationController
-  before_filter :ensure_user_logged_in
+  before_filter :ensure_user_has_profile
 
   # GET /profile
   def show
@@ -11,7 +11,7 @@ class ProfileController < ApplicationController
   def add_linkedin
     @profile = current_user.profile
 
-    @profile.name = 'LinkedIn User'
+    @profile.name = "LinkedIn User #{@profile.user.email}"
     @profile.save!
 
     redirect_to profile_path
@@ -22,7 +22,7 @@ class ProfileController < ApplicationController
     @profile = current_user.profile
     
     # TODO: real integration
-    @profile.name = 'Facebook User'
+    @profile.name = "Facebook User #{@profile.user.email}"
     @profile.save!
 
     redirect_to profile_path

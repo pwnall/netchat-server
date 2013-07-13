@@ -12,6 +12,8 @@ class UsersController < ApplicationController
 
     respond_to do |format|
       if @user.save
+        @profile = Profile.default_for @user
+        @profile.save!
         format.html do
           set_session_current_user @user
           redirect_to session_url
